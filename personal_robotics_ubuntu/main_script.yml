@@ -7,8 +7,11 @@
     target_user: "arika"
     rustdesk_version: "1.2.3"
     ubuntu_codename: "noble"
+    dots_path: "/home/arika/Hyprland-Dots"
 
   tasks:
+    - name: setup dots symlinks
+      import_tasks: tasks/dots.yml
     - name: setup ros 2 jazzy environment
       import_tasks: tasks/ros2.yml
 

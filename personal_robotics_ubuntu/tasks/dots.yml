@@ -1,0 +1,35 @@
+---
+- name: ensure .config directory exists
+  become_user: "{{ target_user }}"
+  file:
+    path: "/home/{{ target_user }}/.config"
+    state: directory
+
+- name: symlink dots config directories
+  become_user: "{{ target_user }}"
+  file:
+    src: "{{ dots_path }}/config/{{ item }}"
+    dest: "/home/{{ target_user }}/.config/{{ item }}"
+    state: link
+    force: yes
+  loop:
+    - hypr
+    - kitty
+    - waybar
+    - swaync
+    - rofi
+    - wallust
+    - ags
+    - fastfetch
+    - btop
+    - cava
+    - swaync
+    - wlogout
+
+- name: ensure .zshrc sources hypr custom settings from repo
+  become_user: "{{ target_user }}"
+  lineinfile:
+    path: "/home/{{ target_user }}/.zshrc"
+    line: "source {{ playbook_dir }}/configs/hypr_custom.zsh"
+    create: yes
+    state: present

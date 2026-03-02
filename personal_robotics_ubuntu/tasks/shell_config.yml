@@ -1,22 +1,8 @@
 ---
-- name: create general shell settings file
-  become_user: "{{ target_user }}"
-  copy:
-    dest: "/home/{{ target_user }}/.shell_settings"
-    content: |
-      # Quick config/reload
-      alias settings="nano ~/.zshrc"
-      alias reload="source ~/.zshrc"
-
-      # tmux helpers
-      alias tma="tmux attach -t"
-      alias tmn="tmux new -t"
-    mode: '0644'
-
-- name: ensure .zshrc sources .shell_settings
+- name: ensure .zshrc sources general shell settings from repo
   become_user: "{{ target_user }}"
   lineinfile:
     path: "/home/{{ target_user }}/.zshrc"
-    line: "source ~/.shell_settings"
+    line: "source {{ playbook_dir }}/configs/shell_settings.zsh"
     create: yes
     state: present
