@@ -3,37 +3,31 @@
   become_user: "{{ target_user }}"
   git:
     repo: https://github.com/LinuxBeginnings/Ubuntu-Hyprland.git
-    dest: "{{ dots_path }}"
+    dest: "{{ installer_path }}"
     version: "24.04"
     depth: 1
-
-- name: check if hyprland repo exists
-  stat:
-    path: "{{ dots_path }}"
-  register: hypr_repo
 
 - name: prepare preset file for automated installation
   become_user: "{{ target_user }}"
   shell: cp preset.sh my_preset.sh
   args:
-    chdir: "{{ dots_path }}"
-    creates: "{{ dots_path }}/my_preset.sh"
-  # Force this to run even in check mode so lineinfile doesn't fail
-  check_mode: no
+    chdir: "{{ installer_path }}"
+    creates: "{{ installer_path }}/my_preset.sh"
+  # Ignore errors in check mode because the directory won't exist yet
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: set nvidia support in preset
   become_user: "{{ target_user }}"
   lineinfile:
-    path: "{{ dots_path }}/my_preset.sh"
+    path: "{{ installer_path }}/my_preset.sh"
     regexp: '^NVIDIA=' 
     line: 'NVIDIA="Y"'
-  # Force this to run even in check mode
-  check_mode: no
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: execute the hyprland installation
   become_user: "{{ target_user }}"
   shell: ./install.sh --preset my_preset.sh
   args:
-    chdir: "{{ dots_path }}"
+    chdir: "{{ installer_path }}"
     creates: "/home/{{ target_user }}/.config/hypr/hyprland.conf"
-  when: hypr_repo.stat.exists or not ansible_check_mode
+  ignore_errors: "{{ ansible_check_mode }}"
