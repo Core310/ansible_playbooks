@@ -1,9 +1,4 @@
 ---
-- name: generate and set locale
-  locale_gen:
-    name: en_US.UTF-8
-    state: present
-
 - name: download ros 2 gpg key
   get_url:
     url: https://raw.githubusercontent.com/ros/rosdistro/master/ros.key

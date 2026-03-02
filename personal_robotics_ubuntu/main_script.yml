@@ -9,11 +9,17 @@
     ubuntu_codename: "noble"
 
   tasks:
-    - name: configure base system and apt packages
-      import_tasks: tasks/system_env_changes.yml
-
     - name: setup ros 2 jazzy environment
       import_tasks: tasks/ros2.yml
 
-#    - name: configure zsh and terminal
-#      import_tasks: tasks/zsh_config.yml
+    - name: hyprland install assume nvida gpu
+      import_tasks: tasks/hyprland.yml
+
+    - name: development tools
+      import_tasks: tasks/dev_tools.yml
+
+    - name: desktop applications and base system
+      import_tasks: tasks/apps.yml
+
+    - name: shell configuration and aliases
+      import_tasks: tasks/shell_config.yml
