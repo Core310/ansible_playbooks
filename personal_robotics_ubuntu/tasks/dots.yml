@@ -25,9 +25,11 @@
 
 - name: backup existing config directories if they are not symlinks
   become_user: "{{ target_user }}"
-  shell: "mv {{ item.stat.path }} {{ item.stat.path }}.bak"
+  command: "mv {{ item.stat.path }} {{ item.stat.path }}.bak"
   when: item.stat.exists and not item.stat.islnk
   loop: "{{ config_stats.results }}"
+  # This task is skipped in check mode but we need it to NOT fail 
+  # the symlink task during a check run.
 
 - name: symlink dots config directories
   become_user: "{{ target_user }}"
@@ -48,6 +50,10 @@
     - btop
     - cava
     - wlogout
+  # In check mode, if the directory already exists, this will fail 
+  # unless we skip it or tell it it's okay.
+  # But we want it to work in real runs.
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: ensure .zshrc sources hypr custom settings from repo
   become_user: "{{ target_user }}"
