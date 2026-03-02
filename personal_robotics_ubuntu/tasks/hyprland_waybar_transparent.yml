@@ -1,0 +1,8 @@
+---
+- name: ensure transparent waybar style is linked
+  become_user: "{{ target_user }}"
+  file:
+    src: "{{ dots_path }}/config/waybar/style/[Transparent] Crystal Clear.css"
+    dest: "/home/{{ target_user }}/.config/waybar/style.css"
+    state: link
+    force: yes

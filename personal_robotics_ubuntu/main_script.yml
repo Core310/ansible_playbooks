@@ -13,6 +13,8 @@
   tasks:
     - name: setup dots symlinks
       import_tasks: tasks/dots.yml
+    - name: force transparent waybar
+      import_tasks: tasks/hyprland_waybar_transparent.yml
     - name: setup ros 2 jazzy environment
       import_tasks: tasks/ros2.yml
 
