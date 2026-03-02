@@ -1,0 +1,19 @@
+---
+- name: system setup for workstation
+  hosts: localhost
+  connection: local
+  become: true
+  vars:
+    target_user: "arika"
+    rustdesk_version: "1.2.3"
+    ubuntu_codename: "noble"
+
+  tasks:
+    - name: configure base system and apt packages
+      import_tasks: tasks/system_env_changes.yml
+
+    - name: setup ros 2 jazzy environment
+      import_tasks: tasks/ros2.yml
+
+#    - name: configure zsh and terminal
+#      import_tasks: tasks/zsh_config.yml
