@@ -5,6 +5,32 @@
     path: "/home/{{ target_user }}/.config"
     state: directory
 
+- name: check existing config paths
+  become_user: "{{ target_user }}"
+  stat:
+    path: "/home/{{ target_user }}/.config/{{ item }}"
+  register: config_stats
+  loop:
+    - hypr
+    - kitty
+    - waybar
+    - swaync
+    - rofi
+    - wallust
+    - ags
+    - fastfetch
+    - btop
+    - cava
+    - wlogout
+
+- name: remove existing config directories if they are not symlinks
+  become_user: "{{ target_user }}"
+  file:
+    path: "{{ item.stat.path }}"
+    state: absent
+  when: item.stat.exists and not item.stat.islnk
+  loop: "{{ config_stats.results }}"
+
 - name: symlink dots config directories
   become_user: "{{ target_user }}"
   file:
@@ -23,7 +49,6 @@
     - fastfetch
     - btop
     - cava
-    - swaync
     - wlogout
 
 - name: ensure .zshrc sources hypr custom settings from repo
