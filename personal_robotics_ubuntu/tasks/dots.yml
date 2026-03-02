@@ -33,3 +33,11 @@
     line: "source {{ playbook_dir }}/configs/hypr_custom.zsh"
     create: yes
     state: present
+
+- name: set wallDIR in hyprland user env variables
+  become_user: "{{ target_user }}"
+  lineinfile:
+    path: "/home/{{ target_user }}/.config/hypr/UserConfigs/ENVariables.conf"
+    line: "env = wallDIR,/home/arika/Documents/ansible_playbooks/background"
+    create: yes
+    state: present

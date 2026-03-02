@@ -7,6 +7,12 @@ To run the setup on your local machine, use the following command:
 ansible-playbook main_script.yml -K
 ```
 
+## 📂 Dotfiles & Customizations
+- **Hyprland Dots**: Your existing dots in `~/Hyprland-Dots` are automatically symlinked to `~/.config`.
+- **Wallpapers**: 
+  - Source: `/home/arika/Documents/ansible_playbooks/background`
+  - The `wallDIR` variable is configured in both your shell and Hyprland environment to point here.
+
 # Post-Installation & Login Checklist
 
 After running the Ansible playbook, you will need to manually log into or configure the following services.
