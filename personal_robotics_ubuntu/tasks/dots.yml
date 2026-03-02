@@ -23,11 +23,9 @@
     - cava
     - wlogout
 
-- name: remove existing config directories if they are not symlinks
+- name: backup existing config directories if they are not symlinks
   become_user: "{{ target_user }}"
-  file:
-    path: "{{ item.stat.path }}"
-    state: absent
+  shell: "mv {{ item.stat.path }} {{ item.stat.path }}.bak"
   when: item.stat.exists and not item.stat.islnk
   loop: "{{ config_stats.results }}"
 
