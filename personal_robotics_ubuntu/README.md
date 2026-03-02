@@ -20,8 +20,9 @@ On a new Ubuntu 24.04 instance, follow these steps:
    ```
 
 ## 📂 Dotfiles & Customizations
-- **Auto-Clone**: This playbook automatically clones the `LinuxBeginnings/Ubuntu-Hyprland` repo (v24.04) into `~/Hyprland-Dots`.
-- **Hyprland Dots**: Those dots are then symlinked to `~/.config`.
+- **Dotfiles**: This playbook automatically clones your `Hyprland-Dots` repo into `~/Hyprland-Dots`.
+- **Installer**: The `LinuxBeginnings/Ubuntu-Hyprland` (v24.04) repository is cloned temporarily into `/tmp/hyprland-installer` to execute the system-wide setup.
+- **Hyprland Dots**: Your configuration folders are then symlinked to `~/.config` from `~/Hyprland-Dots`.
   - **Backups**: If a real directory already exists in `~/.config`, it is renamed to `.bak` (e.g., `~/.config/hypr.bak`) before symlinking.
 - **Wallpapers**: 
   - Source: `/home/arika/Documents/ansible_playbooks/background`
