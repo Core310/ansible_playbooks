@@ -9,6 +9,7 @@ ansible-playbook main_script.yml -K
 
 ## 📂 Dotfiles & Customizations
 - **Hyprland Dots**: Your existing dots in `~/Hyprland-Dots` are automatically symlinked to `~/.config`.
+  - **Backups**: If a real directory already exists in `~/.config`, it is renamed to `.bak` (e.g., `~/.config/hypr.bak`) before symlinking.
 - **Wallpapers**: 
   - Source: `/home/arika/Documents/ansible_playbooks/background`
   - The `wallDIR` variable is configured in both your shell and Hyprland environment to point here.
