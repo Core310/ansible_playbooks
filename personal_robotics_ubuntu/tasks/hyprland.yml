@@ -3,27 +3,27 @@
   become_user: "{{ target_user }}"
   git:
     repo: https://github.com/LinuxBeginnings/Ubuntu-Hyprland.git
-    dest: "/home/{{ target_user }}/Ubuntu-Hyprland"
+    dest: "{{ dots_path }}"
     version: "24.04"
     depth: 1
 
 - name: check if hyprland repo exists
   stat:
-    path: "/home/{{ target_user }}/Ubuntu-Hyprland"
+    path: "{{ dots_path }}"
   register: hypr_repo
 
 - name: prepare preset file for automated installation
   become_user: "{{ target_user }}"
   shell: cp preset.sh my_preset.sh
   args:
-    chdir: "/home/{{ target_user }}/Ubuntu-Hyprland"
-    creates: "/home/{{ target_user }}/Ubuntu-Hyprland/my_preset.sh"
+    chdir: "{{ dots_path }}"
+    creates: "{{ dots_path }}/my_preset.sh"
   when: hypr_repo.stat.exists or not ansible_check_mode
 
 - name: set nvidia support in preset
   become_user: "{{ target_user }}"
   lineinfile:
-    path: "/home/{{ target_user }}/Ubuntu-Hyprland/my_preset.sh"
+    path: "{{ dots_path }}/my_preset.sh"
     regexp: '^NVIDIA=' 
     line: 'NVIDIA="Y"'
   when: hypr_repo.stat.exists or not ansible_check_mode
@@ -32,6 +32,6 @@
   become_user: "{{ target_user }}"
   shell: ./install.sh --preset my_preset.sh
   args:
-    chdir: "/home/{{ target_user }}/Ubuntu-Hyprland"
+    chdir: "{{ dots_path }}"
     creates: "/home/{{ target_user }}/.config/hypr/hyprland.conf"
   when: hypr_repo.stat.exists or not ansible_check_mode
