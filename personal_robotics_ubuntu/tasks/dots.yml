@@ -1,4 +1,12 @@
 ---
+- name: ensure dotfiles repository is cloned
+  become_user: "{{ target_user }}"
+  git:
+    repo: https://github.com/JaKooLit/Hyprland-Dots.git
+    dest: "{{ dots_path }}"
+    version: "main" # or your specific branch
+    depth: 1
+
 - name: ensure .config directory exists
   become_user: "{{ target_user }}"
   file:
