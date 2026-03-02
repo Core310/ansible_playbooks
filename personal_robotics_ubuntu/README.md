@@ -28,6 +28,8 @@ After running the Ansible playbook, you will need to manually log into or config
   - Log in to sync your tasks.
 - **Steam**:
   - Log in to access your game library.
+- **Thunderbird / Calendar**:
+  - Set up your email accounts and sync your online calendars (Google, Outlook, CalDAV).
 
 ## 🛠️ Manual Installations
 - **DaVinci Resolve**:

@@ -9,20 +9,25 @@
     name: gimp
     state: present
 
-- name: enable 32-bit architecture for steam
-  command: dpkg --add-architecture i386
-  register: i386_added
-  changed_when: "'i386' not in ansible_facts.packages"
-
-- name: update apt cache after adding architecture
+- name: install system utilities
   apt:
-    update_cache: yes
-  when: i386_added.changed
-
-- name: install steam
-  apt:
-    name: steam-installer
+    name:
+      - thunar
+      - thunderbird
+      - gnome-calendar
     state: present
+
+- name: ensure flathub repository is enabled
+  flatpak_remote:
+    name: flathub
+    state: present
+    flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
+
+- name: install steam via flatpak
+  flatpak:
+    name: com.valvesoftware.Steam
+    state: present
+    remote: flathub
 
 - name: install tailscale
   shell: curl -fsSL https://tailscale.com/install.sh | sh
