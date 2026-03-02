@@ -1,3 +1,12 @@
+# Personal Robotics Ubuntu Setup
+
+## 🚀 Getting Started
+To run the setup on your local machine, use the following command:
+
+```bash
+ansible-playbook main_script.yml -K
+```
+
 # Post-Installation & Login Checklist
 
 After running the Ansible playbook, you will need to manually log into or configure the following services.
