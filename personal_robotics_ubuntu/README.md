@@ -1,14 +1,27 @@
 # Personal Robotics Ubuntu Setup
 
-## 🚀 Getting Started
-To run the setup on your local machine, use the following command:
+## 🚀 Getting Started (Fresh Install)
+On a new Ubuntu 24.04 instance, follow these steps:
 
-```bash
-ansible-playbook main_script.yml -K
-```
+1. **Install Prerequisites**:
+   ```bash
+   sudo apt update && sudo apt install -y ansible git
+   ```
+
+2. **Clone this Setup Repository**:
+   ```bash
+   git clone https://github.com/Core310/ansible_playbooks.git
+   cd personal_robotics_ubuntu
+   ```
+
+3. **Run the Playbook**:
+   ```bash
+   ansible-playbook main_script.yml -K
+   ```
 
 ## 📂 Dotfiles & Customizations
-- **Hyprland Dots**: Your existing dots in `~/Hyprland-Dots` are automatically symlinked to `~/.config`.
+- **Auto-Clone**: This playbook automatically clones the `LinuxBeginnings/Ubuntu-Hyprland` repo (v24.04) into `~/Hyprland-Dots`.
+- **Hyprland Dots**: Those dots are then symlinked to `~/.config`.
   - **Backups**: If a real directory already exists in `~/.config`, it is renamed to `.bak` (e.g., `~/.config/hypr.bak`) before symlinking.
 - **Wallpapers**: 
   - Source: `/home/arika/Documents/ansible_playbooks/background`
