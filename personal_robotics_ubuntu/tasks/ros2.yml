@@ -14,3 +14,38 @@
   apt:
     name: ros-jazzy-desktop
     state: present
+
+- name: create ros2 shell settings file
+  become_user: "{{ target_user }}"
+  copy:
+    dest: "/home/{{ target_user }}/.ros2_settings"
+    content: |
+      # ROS 2 aliases
+      alias vf="ros2 run tf2_tools view_frames"
+
+      # ROS 2 helpers
+      alias r2="ros2"
+      alias src="source install/setup.sh"
+      alias tlist="r2 topic list"
+      alias tinfo="r2 topic info"
+      alias techo="r2 topic echo"
+
+      # Colcon build helpers
+      alias cbf="colcon build --parallel-workers $(nproc) --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release"
+
+      # Cleanup (ROS build folders)
+      alias clean="rm -rf build/ install/ log/"
+
+      # global source
+      if [ -f /opt/ros/jazzy/setup.zsh ]; then
+        source /opt/ros/jazzy/setup.zsh
+      fi
+    mode: '0644'
+
+- name: ensure .zshrc sources .ros2_settings
+  become_user: "{{ target_user }}"
+  lineinfile:
+    path: "/home/{{ target_user }}/.zshrc"
+    line: "source ~/.ros2_settings"
+    create: yes
+    state: present
