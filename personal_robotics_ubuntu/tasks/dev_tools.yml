@@ -13,11 +13,17 @@
     name: gh
     state: present
 
+- name: check if nvm is installed
+  stat:
+    path: "/home/{{ target_user }}/.nvm/nvm.sh"
+  register: nvm_script
+
 - name: install nvm
   become_user: "{{ target_user }}"
   shell: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
   args:
     creates: "/home/{{ target_user }}/.nvm/nvm.sh"
+  when: not ansible_check_mode
 
 - name: install node and gemini cli via nvm
   become_user: "{{ target_user }}"
@@ -29,3 +35,4 @@
     npm install -g gemini-chat-cli
   args:
     executable: /bin/bash
+  when: nvm_script.stat.exists or not ansible_check_mode
