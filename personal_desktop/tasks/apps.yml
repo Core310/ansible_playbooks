@@ -1,0 +1,87 @@
+---
+- name: generate and set locale
+  locale_gen:
+    name: en_US.UTF-8
+    state: present
+
+- name: install gimp
+  apt:
+    name: gimp
+    state: present
+
+- name: install system utilities
+  apt:
+    name:
+      - thunar
+      - thunderbird
+      - gnome-calendar
+    state: present
+
+- name: ensure flathub repository is enabled
+  flatpak_remote:
+    name: flathub
+    state: present
+    flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
+
+- name: install steam via flatpak
+  flatpak:
+    name: com.valvesoftware.Steam
+    state: present
+    remote: flathub
+
+- name: install tailscale
+  shell: curl -fsSL https://tailscale.com/install.sh | sh
+  args:
+    creates: /usr/bin/tailscale
+
+- name: install discord
+  snap:
+    name: discord
+    state: present
+
+- name: install vencord
+  become_user: "{{ target_user }}"
+  shell: sh -c "$(curl -sS https://vencord.dev/install.sh)"
+  args:
+    creates: "/home/{{ target_user }}/.config/Vencord"
+
+- name: install obsidian
+  snap:
+    name: obsidian
+    classic: yes
+    state: present
+
+- name: install telegram
+  snap:
+    name: telegram-desktop
+    state: present
+
+- name: install todoist
+  snap:
+    name: todoist
+    state: present
+
+- name: install zotero
+  snap:
+    name: zotero-snap
+    state: present
+
+- name: install jetbrains toolbox
+  shell: |
+    wget -cO /tmp/toolbox.tar.gz "https://data.services.jetbrains.com/products/download?platform=linux&code=TBA"
+    TOOLBOX_TEMP_DIR=$(mktemp -d)
+    tar -C "$TOOLBOX_TEMP_DIR" -xf /tmp/toolbox.tar.gz
+    mv "$TOOLBOX_TEMP_DIR"/*/jetbrains-toolbox /usr/local/bin/
+    rm -rf "$TOOLBOX_TEMP_DIR" /tmp/toolbox.tar.gz
+  args:
+    creates: /usr/local/bin/jetbrains-toolbox
+
+- name: check for davinci resolve installer
+  stat:
+    path: "/home/{{ target_user }}/Downloads/DaVinci_Resolve_Studio_19_Linux.run"
+  register: davinci_installer
+
+- name: instructions for davinci resolve
+  debug:
+    msg: "Manual step required: Download DaVinci Resolve from Blackmagic website and place it in your Downloads folder to automate the final install."
+  when: not davinci_installer.stat.exists
