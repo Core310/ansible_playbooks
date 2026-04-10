@@ -45,7 +45,7 @@
     owner: "{{ target_user }}"
     group: "{{ target_user }}"
     mode: '0644'
-  remote_src: yes
+    remote_src: yes
 
 - name: Create fastfetch config directory
   file:
@@ -62,7 +62,7 @@
     owner: "{{ target_user }}"
     group: "{{ target_user }}"
     mode: '0644'
-  remote_src: yes
+    remote_src: yes
 
 - name: change user shell to zsh
   user:
