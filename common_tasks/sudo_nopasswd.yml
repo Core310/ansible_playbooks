@@ -1,0 +1,9 @@
+---
+- name: Allow 'arika' to have passwordless sudo
+  lineinfile:
+    path: /etc/sudoers.d/90-arika-nopasswd
+    state: present
+    create: yes
+    mode: 0440
+    line: "arika ALL=(ALL) NOPASSWD: ALL"
+    validate: "visudo -cf %s"

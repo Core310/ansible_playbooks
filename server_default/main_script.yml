@@ -29,3 +29,5 @@
       import_tasks: ../common_tasks/nmtui.yml
     - name: install tmux
       import_tasks: ../common_tasks/tmux.yml
+    - name: configure passwordless sudo
+      import_tasks: ../common_tasks/sudo_nopasswd.yml
