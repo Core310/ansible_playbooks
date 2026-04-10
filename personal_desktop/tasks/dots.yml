@@ -64,18 +64,25 @@
   # But we want it to work in real runs.
   ignore_errors: "{{ ansible_check_mode }}"
 
-- name: ensure .zshrc sources hypr custom settings from repo
-  become_user: "{{ target_user }}"
-  lineinfile:
-    path: "/home/{{ target_user }}/.zshrc"
-    line: "source {{ playbook_dir }}/configs/hypr_custom.zsh"
-    create: yes
-    state: present
+- name: Copy hypr_custom.zsh to user home
+  copy:
+    src: "{{ playbook_dir }}/configs/hypr_custom.zsh"
+    dest: "/home/{{ target_user }}/.ansible_configs/hypr_custom.zsh"
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '0644'
+
+- name: ensure .zshrc sources hypr custom settings from local copy
+  ansible.builtin.shell:
+    cmd: |
+      sudo -u {{ target_user }} touch /home/{{ target_user }}/.zshrc
+      sudo -u {{ target_user }} grep -qF 'source $HOME/.ansible_configs/hypr_custom.zsh' /home/{{ target_user }}/.zshrc || \
+      echo 'source $HOME/.ansible_configs/hypr_custom.zsh' | sudo -u {{ target_user }} tee -a /home/{{ target_user }}/.zshrc
 
 - name: set wallDIR in hyprland user env variables
-  become_user: "{{ target_user }}"
-  lineinfile:
-    path: "/home/{{ target_user }}/.config/hypr/UserConfigs/ENVariables.conf"
-    line: "env = wallDIR,/home/arika/Documents/ansible_playbooks/background"
-    create: yes
-    state: present
+  ansible.builtin.shell:
+    cmd: |
+      sudo -u {{ target_user }} mkdir -p /home/{{ target_user }}/.config/hypr/UserConfigs
+      sudo -u {{ target_user }} touch /home/{{ target_user }}/.config/hypr/UserConfigs/ENVariables.conf
+      sudo -u {{ target_user }} grep -qF 'env = wallDIR,$HOME/Documents/ansible_playbooks/background' /home/{{ target_user }}/.config/hypr/UserConfigs/ENVariables.conf || \
+      echo 'env = wallDIR,$HOME/Documents/ansible_playbooks/background' | sudo -u {{ target_user }} tee -a /home/{{ target_user }}/.config/hypr/UserConfigs/ENVariables.conf

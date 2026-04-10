@@ -15,10 +15,25 @@
     name: ros-jazzy-desktop
     state: present
 
-- name: ensure .zshrc sources .ros2_settings from repo
-  become_user: "{{ target_user }}"
-  lineinfile:
-    path: "/home/{{ target_user }}/.zshrc"
-    line: "source {{ playbook_dir }}/configs/ros2_settings.zsh"
-    create: yes
-    state: present
+- name: Create ansible_configs directory in user home
+  file:
+    path: "/home/{{ target_user }}/.ansible_configs"
+    state: directory
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '0755'
+
+- name: Copy ros2_settings.zsh to user home
+  copy:
+    src: "{{ playbook_dir }}/configs/ros2_settings.zsh"
+    dest: "/home/{{ target_user }}/.ansible_configs/ros2_settings.zsh"
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '0644'
+
+- name: ensure .zshrc sources .ros2_settings from local copy
+  ansible.builtin.shell:
+    cmd: |
+      sudo -u {{ target_user }} touch /home/{{ target_user }}/.zshrc
+      sudo -u {{ target_user }} grep -qF 'source $HOME/.ansible_configs/ros2_settings.zsh' /home/{{ target_user }}/.zshrc || \
+      echo 'source $HOME/.ansible_configs/ros2_settings.zsh' | sudo -u {{ target_user }} tee -a /home/{{ target_user }}/.zshrc
