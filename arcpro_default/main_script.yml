@@ -8,11 +8,9 @@
     wifi_domain: ou.edu
     wifi_ssid: "WIFI@OU"
     wifi_username: "coe-repfb4wifi-ssa"
-    arc_password: "CHANGEME"
-    # WARNING: Storing passwords in plain text is not recommended.
-    # Consider using Ansible Vault for better security.
-    airou_password: "RosForce4"
     target_user: airou
+  vars_files:
+    - vars/arc_passwords.yml
 
   roles:
     - role: ../../ansible/roles/linux-arcpro

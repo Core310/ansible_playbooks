@@ -5,8 +5,12 @@
   become: true
   vars:
     target_user: "arika"
+  vars_files:
+    - vars/passwords.yml
 
   tasks:
+    - name: setup user arika
+      import_tasks: ../common_tasks/user_setup.yml
     - name: setup ros 2 jazzy environment
       import_tasks: tasks/ros2.yml
 

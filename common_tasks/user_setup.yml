@@ -1,0 +1,10 @@
+---
+- name: Create user arika
+  user:
+    name: "{{ target_user }}"
+    password: "{{ arika_password | password_hash('sha512') }}"
+    shell: /bin/bash
+    groups: sudo
+    append: yes
+    state: present
+    create_home: yes

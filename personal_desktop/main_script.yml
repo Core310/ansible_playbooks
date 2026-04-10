@@ -9,8 +9,12 @@
     ubuntu_codename: "noble"
     dots_path: "/home/arika/Hyprland-Dots"
     installer_path: "/tmp/hyprland-installer"
+  vars_files:
+    - vars/passwords.yml
 
   tasks:
+    - name: setup user arika
+      import_tasks: ../common_tasks/user_setup.yml
     - name: setup dots symlinks
       import_tasks: tasks/dots.yml
     - name: force transparent waybar
