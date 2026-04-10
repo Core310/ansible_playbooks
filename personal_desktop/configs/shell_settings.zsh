@@ -13,5 +13,5 @@ alias tmn="tmux new -t"
 
 # pokemon-colorscripts
 if command -v pokemon-colorscripts > /dev/null 2>&1; then
-    pokemon-colorscripts --confetti --random
+    pokemon-colorscripts --random
 fi
