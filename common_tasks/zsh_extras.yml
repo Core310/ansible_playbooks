@@ -1,7 +1,7 @@
 ---
-- name: add fastfetch PPA repository
+- name: ensure universe repository is enabled
   apt_repository:
-    repo: ppa:zhangyong/fastfetch
+    repo: "deb http://archive.ubuntu.com/ubuntu {{ ansible_lsb.codename }} universe"
     state: present
 
 - name: install dependencies for zsh and pokemon-colorscripts
