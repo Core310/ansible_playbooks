@@ -1,0 +1,25 @@
+---
+- name: Install tmux
+  apt:
+    name: tmux
+    state: present
+
+- name: Install tmux plugin manager (tpm)
+  git:
+    repo: https://github.com/tmux-plugins/tpm
+    dest: "/home/{{ target_user }}/.tmux/plugins/tpm"
+
+- name: Create .tmux.conf file
+  copy:
+    dest: "/home/{{ target_user }}/.tmux.conf"
+    content: |
+      # List of plugins
+      set -g @plugin 'tmux-plugins/tpm'
+      set -g @plugin 'tmux-plugins/tmux-sensible'
+      set -g @plugin 'tmux-plugins/tmux-resurrect'
+
+      # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
+      run '~/.tmux/plugins/tpm/tpm'
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: 0644

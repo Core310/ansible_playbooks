@@ -1,0 +1,5 @@
+---
+- name: Install Bun.js
+  shell: curl -fsSL https://bun.sh/install | bash
+  args:
+    creates: "/home/{{ target_user }}/.bun/bin/bun"

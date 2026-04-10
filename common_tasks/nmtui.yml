@@ -1,0 +1,5 @@
+---
+- name: Install nmtui
+  apt:
+    name: network-manager
+    state: present

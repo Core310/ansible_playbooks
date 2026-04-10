@@ -1,0 +1,34 @@
+---
+- hosts: localhost
+  connection: local
+  become: yes
+
+  vars:
+    wifi_interface: wlo1
+    wifi_domain: ou.edu
+    wifi_ssid: "WIFI@OU"
+    wifi_username: "coe-repfb4wifi-ssa"
+    arc_password: "CHANGEME"
+    # WARNING: Storing passwords in plain text is not recommended.
+    # Consider using Ansible Vault for better security.
+    airou_password: "RosForce4"
+    target_user: airou
+
+  roles:
+    - role: ../../ansible/roles/linux-arcpro
+
+  tasks:
+    - name: Install ACL package
+      ansible.builtin.package:
+        name: acl
+        state: present
+    - name: Include ROS2 installation tasks
+      include_tasks: tasks/ros2.yml
+
+    - name: Include miscellaneous tools installation tasks
+      include_tasks: tasks/misc_tools.yml
+
+  handlers:
+    - name: Apply netplan
+      ansible.builtin.command: netplan apply
+      changed_when: true

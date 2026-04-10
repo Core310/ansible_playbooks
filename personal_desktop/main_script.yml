@@ -29,3 +29,13 @@
 
     - name: shell configuration and aliases
       import_tasks: tasks/shell_config.yml
+    - name: install docker
+      import_tasks: ../common_tasks/docker.yml
+    - name: install bun
+      import_tasks: ../common_tasks/bun.yml
+    - name: configure unattended upgrades
+      import_tasks: ../common_tasks/unattended_upgrades.yml
+    - name: install nmtui
+      import_tasks: ../common_tasks/nmtui.yml
+    - name: install tmux
+      import_tasks: ../common_tasks/tmux.yml
