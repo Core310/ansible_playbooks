@@ -5,6 +5,7 @@
       - zsh
       - git
       - python3
+      - fastfetch
     state: present
 
 - name: check if oh-my-zsh is installed
@@ -18,6 +19,50 @@
   args:
     creates: "/home/{{ target_user }}/.oh-my-zsh"
   when: not oh_my_zsh_stat.stat.exists
+
+- name: install zsh plugins
+  become_user: "{{ target_user }}"
+  git:
+    repo: "{{ item.repo }}"
+    dest: "/home/{{ target_user }}/.oh-my-zsh/custom/plugins/{{ item.name }}"
+    depth: 1
+  loop:
+    - { name: 'zsh-autosuggestions', repo: 'https://github.com/zsh-users/zsh-autosuggestions' }
+    - { name: 'zsh-syntax-highlighting', repo: 'https://github.com/zsh-users/zsh-syntax-highlighting.git' }
+
+- name: Create custom themes directory
+  file:
+    path: "/home/{{ target_user }}/.oh-my-zsh/custom/themes"
+    state: directory
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '0755'
+
+- name: Copy agnosterzak theme
+  copy:
+    src: "/home/arika/.oh-my-zsh/themes/agnosterzak.zsh-theme"
+    dest: "/home/{{ target_user }}/.oh-my-zsh/custom/themes/agnosterzak.zsh-theme"
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '0644'
+  remote_src: yes
+
+- name: Create fastfetch config directory
+  file:
+    path: "/home/{{ target_user }}/.config/fastfetch"
+    state: directory
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '0755'
+
+- name: Copy fastfetch config
+  copy:
+    src: "/home/arika/.config/fastfetch/"
+    dest: "/home/{{ target_user }}/.config/fastfetch/"
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '0644'
+  remote_src: yes
 
 - name: change user shell to zsh
   user:
