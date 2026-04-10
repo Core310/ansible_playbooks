@@ -1,4 +1,9 @@
 ---
+- name: add fastfetch PPA repository
+  apt_repository:
+    repo: ppa:zhangyong/fastfetch
+    state: present
+
 - name: install dependencies for zsh and pokemon-colorscripts
   apt:
     name:
@@ -7,6 +12,7 @@
       - python3
       - fastfetch
     state: present
+    update_cache: yes
 
 - name: check if oh-my-zsh is installed
   stat:
