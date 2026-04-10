@@ -33,8 +33,11 @@
     - name: desktop applications and base system
       import_tasks: tasks/apps.yml
 
+    - name: install zsh extras
+      import_tasks: ../common_tasks/zsh_extras.yml
+
     - name: shell configuration and aliases
-      import_tasks: tasks/shell_config.yml
+      import_tasks: ../common_tasks/shell_config.yml
     - name: install bun
       import_tasks: ../common_tasks/bun.yml
     - name: configure unattended upgrades

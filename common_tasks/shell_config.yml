@@ -1,0 +1,23 @@
+---
+- name: Create ansible_configs directory in user home
+  file:
+    path: "/home/{{ target_user }}/.ansible_configs"
+    state: directory
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '0755'
+
+- name: Copy shell_settings.zsh to user home
+  copy:
+    src: "{{ playbook_dir }}/configs/shell_settings.zsh"
+    dest: "/home/{{ target_user }}/.ansible_configs/shell_settings.zsh"
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '0644'
+
+- name: ensure .zshrc sources general shell settings from local copy
+  ansible.builtin.shell:
+    cmd: |
+      sudo -u {{ target_user }} touch /home/{{ target_user }}/.zshrc
+      sudo -u {{ target_user }} grep -qF 'source $HOME/.ansible_configs/shell_settings.zsh' /home/{{ target_user }}/.zshrc || \
+      echo 'source $HOME/.ansible_configs/shell_settings.zsh' | sudo -u {{ target_user }} tee -a /home/{{ target_user }}/.zshrc

@@ -19,6 +19,12 @@
     - name: development tools
       import_tasks: tasks/dev_tools.yml
 
+    - name: install zsh extras
+      import_tasks: ../common_tasks/zsh_extras.yml
+
+    - name: shell configuration and aliases
+      import_tasks: ../common_tasks/shell_config.yml
+
     - name: headless applications
       import_tasks: tasks/headless_apps.yml
     - name: install bun

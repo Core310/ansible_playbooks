@@ -1,0 +1,43 @@
+---
+- name: install dependencies for zsh and pokemon-colorscripts
+  apt:
+    name:
+      - zsh
+      - git
+      - python3
+    state: present
+
+- name: check if oh-my-zsh is installed
+  stat:
+    path: "/home/{{ target_user }}/.oh-my-zsh"
+  register: oh_my_zsh_stat
+
+- name: install oh-my-zsh
+  become_user: "{{ target_user }}"
+  shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+  args:
+    creates: "/home/{{ target_user }}/.oh-my-zsh"
+  when: not oh_my_zsh_stat.stat.exists
+
+- name: change user shell to zsh
+  user:
+    name: "{{ target_user }}"
+    shell: /usr/bin/zsh
+
+- name: check if pokemon-colorscripts is installed
+  stat:
+    path: /usr/local/bin/pokemon-colorscripts
+  register: pokemon_stat
+
+- name: clone pokemon-colorscripts repository
+  git:
+    repo: https://gitlab.com/phoneybadger/pokemon-colorscripts.git
+    dest: /tmp/pokemon-colorscripts
+    depth: 1
+  when: not pokemon_stat.stat.exists
+
+- name: install pokemon-colorscripts
+  command: ./install.sh
+  args:
+    chdir: /tmp/pokemon-colorscripts
+  when: not pokemon_stat.stat.exists
