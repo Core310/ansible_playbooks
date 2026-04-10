@@ -11,6 +11,8 @@
   tasks:
     - name: setup user arika
       import_tasks: ../common_tasks/user_setup.yml
+    - name: install docker
+      import_tasks: ../common_tasks/docker.yml
     - name: setup ros 2 jazzy environment
       import_tasks: tasks/ros2.yml
 
@@ -19,8 +21,6 @@
 
     - name: headless applications
       import_tasks: tasks/headless_apps.yml
-    - name: install docker
-      import_tasks: ../common_tasks/docker.yml
     - name: install bun
       import_tasks: ../common_tasks/bun.yml
     - name: configure unattended upgrades

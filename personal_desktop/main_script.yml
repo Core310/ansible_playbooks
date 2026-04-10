@@ -15,6 +15,8 @@
   tasks:
     - name: setup user arika
       import_tasks: ../common_tasks/user_setup.yml
+    - name: install docker
+      import_tasks: ../common_tasks/docker.yml
     - name: setup dots symlinks
       import_tasks: tasks/dots.yml
     - name: force transparent waybar
@@ -33,8 +35,6 @@
 
     - name: shell configuration and aliases
       import_tasks: tasks/shell_config.yml
-    - name: install docker
-      import_tasks: ../common_tasks/docker.yml
     - name: install bun
       import_tasks: ../common_tasks/bun.yml
     - name: configure unattended upgrades
