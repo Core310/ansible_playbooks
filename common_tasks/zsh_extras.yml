@@ -1,8 +1,8 @@
 ---
 - name: add fastfetch PPA repository
-  apt_repository:
-    repo: ppa:zhangsongcui3371/fastfetch
-    state: present
+  ansible.builtin.shell:
+    cmd: add-apt-repository -y ppa:zhangsongcui3371/fastfetch
+  become: true
 
 - name: install dependencies for zsh and pokemon-colorscripts
   apt:
@@ -46,12 +46,11 @@
 
 - name: Copy agnosterzak theme
   copy:
-    src: "/home/arika/.oh-my-zsh/themes/agnosterzak.zsh-theme"
+    src: files/agnosterzak.zsh-theme
     dest: "/home/{{ target_user }}/.oh-my-zsh/custom/themes/agnosterzak.zsh-theme"
     owner: "{{ target_user }}"
     group: "{{ target_user }}"
     mode: '0644'
-    remote_src: yes
 
 - name: Create fastfetch config directory
   file:
@@ -63,12 +62,11 @@
 
 - name: Copy fastfetch config
   copy:
-    src: "/home/arika/.config/fastfetch/"
+    src: files/fastfetch/
     dest: "/home/{{ target_user }}/.config/fastfetch/"
     owner: "{{ target_user }}"
     group: "{{ target_user }}"
     mode: '0644'
-    remote_src: yes
 
 - name: change user shell to zsh
   user:
