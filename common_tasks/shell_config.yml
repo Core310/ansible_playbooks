@@ -15,9 +15,35 @@
     group: "{{ target_user }}"
     mode: '0644'
 
-- name: ensure .zshrc sources general shell settings from local copy
-  ansible.builtin.shell:
-    cmd: |
-      sudo -u {{ target_user }} touch /home/{{ target_user }}/.zshrc
-      sudo -u {{ target_user }} grep -qF 'source $HOME/.ansible_configs/shell_settings.zsh' /home/{{ target_user }}/.zshrc || \
-      echo 'source $HOME/.ansible_configs/shell_settings.zsh' | sudo -u {{ target_user }} tee -a /home/{{ target_user }}/.zshrc
+- name: Setup complete .zshrc file
+  copy:
+    dest: "/home/{{ target_user }}/.zshrc"
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '0644'
+    content: |
+      # Load NVM
+      export NVM_DIR="$HOME/.nvm"
+      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+      [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+      # ROS 2 environment
+      source /opt/ros/jazzy/setup.sh
+
+      # Path exports
+      export PATH="/usr/local/cuda-13.0/bin:$PATH"
+      export LD_LIBRARY_PATH="/usr/local/cuda-13.0/lib64:$LD_LIBRARY_PATH"
+      export UE4_ROOT=~/UnrealEngine_4.26
+
+      # Oh My Zsh configuration
+      export ZSH="$HOME/.oh-my-zsh"
+      ZSH_THEME="agnosterzak"
+      plugins=( 
+          git
+          zsh-autosuggestions
+          zsh-syntax-highlighting
+      )
+      source $ZSH/oh-my-zsh.sh
+
+      # Load custom settings and aliases
+      source $HOME/.ansible_configs/shell_settings.zsh

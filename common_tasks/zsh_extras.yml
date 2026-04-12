@@ -44,10 +44,18 @@
     group: "{{ target_user }}"
     mode: '0755'
 
-- name: Copy agnosterzak theme
+- name: Copy agnosterzak theme to custom themes
   copy:
     src: files/agnosterzak.zsh-theme
     dest: "/home/{{ target_user }}/.oh-my-zsh/custom/themes/agnosterzak.zsh-theme"
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '0644'
+
+- name: Copy agnosterzak theme to standard themes
+  copy:
+    src: files/agnosterzak.zsh-theme
+    dest: "/home/{{ target_user }}/.oh-my-zsh/themes/agnosterzak.zsh-theme"
     owner: "{{ target_user }}"
     group: "{{ target_user }}"
     mode: '0644'
