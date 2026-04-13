@@ -1,0 +1,11 @@
+---
+- name: Pull core server docker images
+  community.docker.docker_image:
+    name: "{{ item }}"
+    source: pull
+  loop:
+    - henrygd/beszel-agent
+    - portainer/portainer-ce:latest
+    - henrygd/beszel:latest
+    - bentopdf/bentopdf:latest
+    - vert-sh/vert

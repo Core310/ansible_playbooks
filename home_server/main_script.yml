@@ -1,0 +1,16 @@
+---
+- name: home server docker image sync
+  hosts: localhost
+  connection: local
+  become: true
+  vars:
+    target_user: "arika"
+  vars_files:
+    - vars/passwords.yml
+
+  tasks:
+    - name: ensure docker is installed and configured
+      import_tasks: ../common_tasks/docker.yml
+
+    - name: sync docker images
+      import_tasks: tasks/docker_sync.yml
