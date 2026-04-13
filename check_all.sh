@@ -1,6 +1,13 @@
 #!/bin/bash
 # Script to run a dry-run check on all playbooks in the repository.
 
+# Check if ansible-playbook is installed
+if ! command -v ansible-playbook &> /dev/null; then
+    echo "Error: ansible-playbook could not be found."
+    echo "Please install Ansible by running: sudo apt update && sudo apt install -y ansible"
+    exit 1
+fi
+
 # List of all playbook directories
 playbooks=("personal_desktop" "server_default" "arcpro_default" "robotics_isaac_sim" "home_server")
 
