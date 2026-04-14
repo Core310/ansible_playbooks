@@ -11,6 +11,8 @@
       - git
       - python3
       - fastfetch
+      - kitty
+      - xterm
     state: present
     update_cache: yes
 
