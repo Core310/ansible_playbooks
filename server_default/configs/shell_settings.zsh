@@ -19,7 +19,7 @@ fi
 # General Aliases
 alias settings='nano ~/.zshrc'
 alias l='ls'
-alias ls='ls -a --color=auto'
+alias ls='ls --color=auto'
 
 # ROS 2 helpers
 alias r2="ros2"
