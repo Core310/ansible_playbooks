@@ -12,3 +12,6 @@
 
     - name: sync docker images
       import_tasks: tasks/docker_sync.yml
+
+    - name: build vert from source
+      import_tasks: tasks/build_vert.yml
