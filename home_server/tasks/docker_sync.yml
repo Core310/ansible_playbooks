@@ -8,3 +8,4 @@
     - portainer/portainer-ce:latest
     - henrygd/beszel:latest
     - bentopdf/bentopdf:latest
+    - ghcr.io/vert-sh/vert:latest
