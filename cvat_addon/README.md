@@ -18,10 +18,13 @@ Run the following command from this directory:
 ./run.sh
 ```
 
-### Accessing the UI
-Once the containers are running (it may take 1-2 minutes for the database to initialize):
-*   **Via Tailscale:** `http://[YOUR-TAILSCALE-IP]:8093`
-*   **Locally:** `http://localhost:8093`
+### Accessing the UI (via Tailscale)
+
+If you have **MagicDNS** enabled, you can access CVAT using your machine's hostname and your tailnet domain (`husky-bangus.ts.net`):
+
+*   **CVAT UI:** `http://[hostname].husky-bangus.ts.net:8093`
+
+*(Alternatively, you can always use the raw Tailscale IP displayed by the `tailscale ip` command).*
 
 ## Admin User Creation
 After running the playbook, you must manually create your admin account:
