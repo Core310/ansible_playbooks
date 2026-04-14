@@ -1,5 +1,5 @@
 #!/bin/bash
-# Wrapper script to run the ansible playbook with the vault password prompt.
+# Wrapper script to run the home_server playbook.
 
 # Check if ansible-playbook is installed
 if ! command -v ansible-playbook &> /dev/null; then
@@ -9,4 +9,4 @@ if ! command -v ansible-playbook &> /dev/null; then
 fi
 
 # Any additional arguments passed to this script will be passed to ansible-playbook.
-ansible-playbook -i inventory.ini main_script.yml --ask-vault-pass -K "$@"
+ansible-playbook -i inventory.ini main_script.yml -K "$@"
