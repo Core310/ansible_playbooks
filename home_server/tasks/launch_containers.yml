@@ -1,0 +1,22 @@
+---
+- name: Create docker-compose directory
+  file:
+    path: "/home/{{ target_user }}/home_server"
+    state: directory
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '0755'
+
+- name: Copy docker-compose.yml
+  copy:
+    src: configs/docker-compose.yml
+    dest: "/home/{{ target_user }}/home_server/docker-compose.yml"
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '0644'
+
+- name: Launch home server containers
+  become_user: "{{ target_user }}"
+  ansible.builtin.shell:
+    cmd: docker compose up -d
+    chdir: "/home/{{ target_user }}/home_server"

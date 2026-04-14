@@ -15,3 +15,6 @@
 
     - name: build vert from source
       import_tasks: tasks/build_vert.yml
+
+    - name: launch containers
+      import_tasks: tasks/launch_containers.yml
