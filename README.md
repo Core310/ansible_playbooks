@@ -41,13 +41,12 @@ A collection of Ansible playbooks for automating the setup of robotics workstati
 *   **Isaac Sim:** Automated installation of Isaac Sim via pip and Isaac Lab from source.
 *   **Hardware:** Configures the NVIDIA Container Toolkit for GPU-accelerated Docker containers.
 
-### 4. [Home Server Sync](./home_server)
+### 4. [Personal Docker Containers](./personal_docker_containers)
 **Goal:** A modular "Add-on" playbook to sync and manage your Docker infrastructure.
-*   **Docker Sync:** Automatically pulls and updates core containers:
-    *   **Beszel** (Monitoring)
-    *   **Portainer** (Management)
-    *   **BentoPDF**
-    *   **VERT**
+*   **Docker Sync & Launch:** Automatically pulls, updates, and launches core containers:
+    *   **Portainer:** Management UI on custom port **8447**.
+    *   **Beszel:** Monitoring Hub and Agent.
+    *   **BentoPDF & VERT** (built from source).
 
 ### 5. [ArcPro Robot](./arcpro_default)
 **Goal:** Specialized setup for ArcPro robotics hardware.
