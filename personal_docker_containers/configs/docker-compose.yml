@@ -32,7 +32,7 @@ services:
     container_name: bentopdf
     restart: unless-stopped
     ports:
-      - "8080:80"
+      - "8094:80"
 
   vert:
     image: vert-sh/vert
