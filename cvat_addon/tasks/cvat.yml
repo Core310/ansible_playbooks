@@ -1,0 +1,42 @@
+---
+- name: Clone CVAT repository
+  become_user: "{{ target_user }}"
+  git:
+    repo: https://github.com/cvat-ai/cvat.git
+    dest: "/home/{{ target_user }}/cvat"
+    version: develop # Or your preferred version
+    depth: 1
+
+- name: Get Tailscale IP address
+  ansible.builtin.shell:
+    cmd: tailscale ip -4
+  register: tailscale_ip
+  changed_when: false
+  ignore_errors: yes
+
+- name: Create docker-compose.override.yml
+  become_user: "{{ target_user }}"
+  copy:
+    dest: "/home/{{ target_user }}/cvat/docker-compose.override.yml"
+    content: |
+      services:
+        traefik:
+          ports:
+            - 8093:8080
+            - 8090:8090
+        cvat_server:
+          volumes:
+            - ./tests/mounted_file_share:/home/django/share:ro
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '0644'
+
+- name: Start CVAT using Docker Compose with Tailscale IP
+  become_user: "{{ target_user }}"
+  ansible.builtin.shell:
+    cmd: |
+      export CVAT_HOST={{ tailscale_ip.stdout | default('localhost') }}
+      docker compose up -d
+    chdir: "/home/{{ target_user }}/cvat"
+  environment:
+    CVAT_HOST: "{{ tailscale_ip.stdout | default('localhost') }}"

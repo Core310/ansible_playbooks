@@ -1,0 +1,16 @@
+---
+- name: install cvat add-on
+  hosts: localhost
+  connection: local
+  become: true
+  vars:
+    target_user: "arika"
+  vars_files:
+    - vars/passwords.yml
+
+  tasks:
+    - name: ensure docker is installed and configured
+      import_tasks: ../common_tasks/docker.yml
+
+    - name: setup cvat
+      import_tasks: tasks/cvat.yml
