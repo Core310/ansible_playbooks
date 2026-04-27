@@ -79,10 +79,20 @@
       sudo -u {{ target_user }} grep -qF 'source $HOME/.ansible_configs/hypr_custom.zsh' /home/{{ target_user }}/.zshrc || \
       echo 'source $HOME/.ansible_configs/hypr_custom.zsh' | sudo -u {{ target_user }} tee -a /home/{{ target_user }}/.zshrc
 
-- name: set wallDIR in hyprland user env variables
+- name: set nvidia and wallpaper variables in hyprland user env variables
   ansible.builtin.shell:
     cmd: |
       sudo -u {{ target_user }} mkdir -p /home/{{ target_user }}/.config/hypr/UserConfigs
       sudo -u {{ target_user }} touch /home/{{ target_user }}/.config/hypr/UserConfigs/ENVariables.conf
+      
+      # Set Wallpaper Directory
       sudo -u {{ target_user }} grep -qF 'env = wallDIR,$HOME/Documents/ansible_playbooks/background' /home/{{ target_user }}/.config/hypr/UserConfigs/ENVariables.conf || \
       echo 'env = wallDIR,$HOME/Documents/ansible_playbooks/background' | sudo -u {{ target_user }} tee -a /home/{{ target_user }}/.config/hypr/UserConfigs/ENVariables.conf
+      
+      # Set NVIDIA Stability Variables
+      for var in "LIBVA_DRIVER_NAME,nvidia" "__GLX_VENDOR_LIBRARY_NAME,nvidia" "GBM_BACKEND,nvidia-drm" "NVD_BACKEND,direct" "ELECTRON_OZONE_PLATFORM_HINT,auto"; do
+        key=$(echo $var | cut -d, -f1)
+        val=$(echo $var | cut -d, -f2)
+        sudo -u {{ target_user }} grep -qF "env = $key,$val" /home/{{ target_user }}/.config/hypr/UserConfigs/ENVariables.conf || \
+        echo "env = $key,$val" | sudo -u {{ target_user }} tee -a /home/{{ target_user }}/.config/hypr/UserConfigs/ENVariables.conf
+      done
