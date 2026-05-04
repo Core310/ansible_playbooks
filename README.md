@@ -53,15 +53,6 @@ A collection of Ansible playbooks for automating the setup of robotics workstati
 *   **Users:** Creates and configures the `arc` and `airou` system accounts.
 *   **Networking:** Configures enterprise Wi-Fi (WPA2-EAP) using Netplan.
 *   **Robotics:** ROS 2 Jazzy, VESC Tool, and arcpro_system repository setup.
-
-### 6. [CVAT Add-on](./cvat_addon)
-**Goal:** Automates the deployment of the Computer Vision Annotation Tool.
-*   **Networking:** Automatic Tailscale IP detection for the `CVAT_HOST`.
-*   **Ports:** Sets Traefik to port 8093 for remote access.
-*   **Storage:** Configures local file share mapping for easy annotation.
-
----
-
 ## 🛠️ Common Tasks (Shared Logic)
 All playbooks share a library of common, verified tasks located in `common_tasks/`:
 *   **Docker:** Modern engine install with NVIDIA GPU support.

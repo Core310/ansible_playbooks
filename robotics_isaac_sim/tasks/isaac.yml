@@ -23,11 +23,37 @@
   become: true
   notify: Restart Docker
 
-- name: Install Isaac Sim via pip
+- name: Install software-properties-common
+  apt:
+    name: software-properties-common
+    state: present
+
+- name: Add deadsnakes PPA for Python 3.10
+  ansible.builtin.apt_repository:
+    repo: ppa:deadsnakes/ppa
+    state: present
+
+- name: Install Python 3.10 and venv
+  apt:
+    name:
+      - python3.10
+      - python3.10-venv
+      - python3.10-dev
+    state: present
+    update_cache: yes
+
+- name: Create Isaac Sim virtual environment
+  become_user: "{{ target_user }}"
+  ansible.builtin.command:
+    cmd: python3.10 -m venv "/home/{{ target_user }}/isaacsim_venv"
+    creates: "/home/{{ target_user }}/isaacsim_venv"
+
+- name: Install Isaac Sim via pip in venv
   become_user: "{{ target_user }}"
   ansible.builtin.pip:
     name: isaacsim
     state: present
+    virtualenv: "/home/{{ target_user }}/isaacsim_venv"
     extra_args: "--extra-index-url https://pypi.nvidia.com"
 
 - name: Clone Isaac Lab repository
@@ -44,3 +70,5 @@
       sudo -u {{ target_user }} touch /home/{{ target_user }}/.ansible_configs/shell_settings.zsh
       sudo -u {{ target_user }} grep -qF 'export ISAACLAB_PATH=$HOME/IsaacLab' /home/{{ target_user }}/.ansible_configs/shell_settings.zsh || \
       echo 'export ISAACLAB_PATH=$HOME/IsaacLab' | sudo -u {{ target_user }} tee -a /home/{{ target_user }}/.ansible_configs/shell_settings.zsh
+      sudo -u {{ target_user }} grep -qF 'alias isaacsim="$HOME/isaacsim_venv/bin/python"' /home/{{ target_user }}/.ansible_configs/shell_settings.zsh || \
+      echo 'alias isaacsim="$HOME/isaacsim_venv/bin/python"' | sudo -u {{ target_user }} tee -a /home/{{ target_user }}/.ansible_configs/shell_settings.zsh

@@ -17,38 +17,13 @@
       import_tasks: ../common_tasks/user_setup.yml
     - name: install docker
       import_tasks: ../common_tasks/docker.yml
-    - name: setup dots symlinks
-      import_tasks: tasks/dots.yml
-    - name: force transparent waybar
-      import_tasks: tasks/hyprland_waybar_transparent.yml
-    - name: setup ros 2 jazzy environment
-      import_tasks: tasks/ros2.yml
 
     - name: setup isaac sim and lab
       import_tasks: tasks/isaac.yml
 
-    - name: hyprland install assume nvida gpu
-      import_tasks: tasks/hyprland.yml
+    - name: setup isolated ros2 environments
+      import_tasks: tasks/ros2_docker.yml
 
-    - name: development tools
-      import_tasks: tasks/dev_tools.yml
-
-    - name: desktop applications and base system
-      import_tasks: tasks/apps.yml
-
-    - name: install zsh extras
-      import_tasks: ../common_tasks/zsh_extras.yml
-
-    - name: shell configuration and aliases
-      import_tasks: ../common_tasks/shell_config.yml
-    - name: install bun
-      import_tasks: ../common_tasks/bun.yml
-    - name: configure unattended upgrades
-      import_tasks: ../common_tasks/unattended_upgrades.yml
-    - name: install nmtui
-      import_tasks: ../common_tasks/nmtui.yml
-    - name: install tmux
-      import_tasks: ../common_tasks/tmux.yml
     - name: configure passwordless sudo
       import_tasks: ../common_tasks/sudo_nopasswd.yml
 

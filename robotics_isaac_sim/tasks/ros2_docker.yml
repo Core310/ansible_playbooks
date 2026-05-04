@@ -1,0 +1,72 @@
+---
+- name: Create robotics directory
+  file:
+    path: "/home/{{ target_user }}/robotics"
+    state: directory
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+
+- name: Create ROS2 Docker configuration
+  copy:
+    dest: "/home/{{ target_user }}/robotics/docker-compose.yml"
+    content: |
+      services:
+        jazzy:
+          image: osrf/ros:jazzy-desktop
+          container_name: ros2_jazzy
+          network_mode: host
+          ipc: host
+          privileged: true
+          environment:
+            - DISPLAY=${DISPLAY}
+            - QT_X11_NO_MITSHM=1
+          volumes:
+            - /tmp/.X11-unix:/tmp/.X11-unix
+            - /dev/dri:/dev/dri
+            - /home/{{ target_user }}/robotics/shared:/root/shared
+          command: sleep infinity
+
+        humble:
+          image: osrf/ros:humble-desktop
+          container_name: ros2_humble
+          network_mode: host
+          ipc: host
+          privileged: true
+          environment:
+            - DISPLAY=${DISPLAY}
+            - QT_X11_NO_MITSHM=1
+          volumes:
+            - /tmp/.X11-unix:/tmp/.X11-unix
+            - /dev/dri:/dev/dri
+            - /home/{{ target_user }}/robotics/shared:/root/shared
+          command: sleep infinity
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+
+- name: Create shared directory for ROS2 containers
+  file:
+    path: "/home/{{ target_user }}/robotics/shared"
+    state: directory
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+
+- name: Add ROS2 aliases to shell config
+  ansible.builtin.shell:
+    cmd: |
+      sudo -u {{ target_user }} touch /home/{{ target_user }}/.ansible_configs/ros2_aliases.zsh
+      sudo -u {{ target_user }} grep -qF 'alias r2j="docker exec -it ros2_jazzy ros2"' /home/{{ target_user }}/.ansible_configs/ros2_aliases.zsh || \
+      echo 'alias r2j="docker exec -it ros2_jazzy ros2"' | sudo -u {{ target_user }} tee -a /home/{{ target_user }}/.ansible_configs/ros2_aliases.zsh
+      sudo -u {{ target_user }} grep -qF 'alias r2h="docker exec -it ros2_humble ros2"' /home/{{ target_user }}/.ansible_configs/ros2_aliases.zsh || \
+      echo 'alias r2h="docker exec -it ros2_humble ros2"' | sudo -u {{ target_user }} tee -a /home/{{ target_user }}/.ansible_configs/ros2_aliases.zsh
+      
+      # Ensure it is sourced in .zshrc
+      sudo -u {{ target_user }} grep -qF 'source $HOME/.ansible_configs/ros2_aliases.zsh' /home/{{ target_user }}/.zshrc || \
+      echo 'source $HOME/.ansible_configs/ros2_aliases.zsh' | sudo -u {{ target_user }} tee -a /home/{{ target_user }}/.zshrc
+
+- name: Start ROS2 containers
+  become_user: "{{ target_user }}"
+  ansible.builtin.command:
+    cmd: docker compose up -d
+    chdir: "/home/{{ target_user }}/robotics"
+
+
