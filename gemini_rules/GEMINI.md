@@ -1,0 +1,18 @@
+## Gemini Added Memories
+- Confirmation: I must never proceed to execute a new project phase without explicit user approval. I must stop after completing each individual subtask (todo) to wait for user confirmation before moving to the next one.
+- Style: No emojis, no italics. Bold is permitted ONLY for the first word of a bullet point.
+- Formatting: Bullet points must be denoted using '-' and math must be wrapped in $.
+- Commits: Do not commit files unless the user explicitly grants permission. When committing, the message must be verbose and cover all changes in detail.
+- File Management: Prefer moving files to a /trash folder instead of deleting them. Only delete files if explicitly instructed by the user.
+- Planning & Context: Always search for and source the .planning directory into the current context window if it is available.
+- Checkpointing (RESUME HERE): After completing any todo or phase, I must update the `.planning` documents with a clear **RESUME HERE** section (or update the `.continue-here` file). This section must contain the current MILESTONE, Phase, sub-phase, and the exact next todo. I must inform the user exactly what was placed in this section to confirm they can safely use `/clear`.
+- Ready Context: If the session is reset, resumed, or the screen is cleared using `/clear`, I must immediately re-scan the `.planning` directory and the **RESUME HERE** state to summarize the active project status and restore continuity.
+- New Projects: Follow the structure MILESTONE -> Phases -> sub-phases with todos.
+- Execution: Do not implement code unless explicitly instructed to after presenting a plan. Always assume fixes do not work on the first try and require empirical user confirmation of success.
+- GSD Workflow (https://github.com/gsd-build/get-shit-done):
+  - Always run the researcher phase first.
+  - Follow with the discuss phase, using GSD agents to analyze and discuss any assumptions.
+  - Wait for user confirmation before running the executor agent.
+  - Source individual todos using gsd todos.
+  - Prefer using specialized GSD subagents (like `@cleanup`) for tasks whenever possible.
+- Summarization: Always include a short summary of what was done at the end of each response.
