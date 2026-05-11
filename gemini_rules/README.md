@@ -35,3 +35,7 @@ cp /home/arika/Documents/ansible_stuff/ansible_playbooks/gemini_rules/agents/*.m
 
 - **@cleanup**: Handles project health (`gsd doctor`), codebase mapping, and uncommitted drift detection.
 - **@syntax-auditor**: Audits local files against official online documentation.
+
+## Skills
+
+- **codebase-to-course**: Transforms any codebase into a beautiful, interactive single-page HTML course.

@@ -15,4 +15,7 @@
   - Wait for user confirmation before running the executor agent.
   - Source individual todos using gsd todos.
   - Prefer using specialized GSD subagents (like `@cleanup`) for tasks whenever possible.
+- Skills:
+  - **Cleanup**: Use for health checks and codebase mapping.
+  - **Codebase-to-Course**: Use to transform a codebase into an interactive HTML course/tutorial.
 - Summarization: Always include a short summary of what was done at the end of each response.
