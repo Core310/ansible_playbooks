@@ -25,7 +25,7 @@
 
 - name: add librewolf repository
   apt_repository:
-    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/librewolf.gpg] https://deb.librewolf.net {{ ubuntu_codename }} main"
+    repo: "deb [arch={{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }} signed-by=/usr/share/keyrings/librewolf.gpg] https://deb.librewolf.net {{ ubuntu_codename }} main"
     filename: librewolf
     state: present
 

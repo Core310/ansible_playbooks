@@ -6,7 +6,7 @@
 
 - name: add ros 2 repository
   apt_repository:
-    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu {{ ansible_distribution_release }} main"
+    repo: "deb [arch={{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }} signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu {{ ansible_distribution_release }} main"
     filename: ros2
     state: present
 
