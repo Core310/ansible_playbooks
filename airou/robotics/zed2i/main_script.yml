@@ -1,0 +1,38 @@
+---
+- name: Setup ZED 2i SDK and Environment
+  hosts: local_host
+  connection: local
+  become: true
+  vars:
+    target_user: "arika"
+    zed_sdk_version: "5.3"
+    zed_sdk_url: "https://download.stereolabs.com/zedsdk/5.3/cu12/ubuntu24"
+
+  tasks:
+    - name: install dependencies
+      apt:
+        name:
+          - zstd
+          - curl
+          - wget
+        state: present
+        update_cache: yes
+
+    - name: check if ZED SDK is installed
+      stat:
+        path: /usr/local/zed/tools/ZED_Diagnostic
+      register: zed_sdk_installed
+
+    - name: download ZED SDK installer
+      get_url:
+        url: "{{ zed_sdk_url }}"
+        dest: "/tmp/ZED_SDK_Installer.run"
+        mode: '0755'
+      when: not zed_sdk_installed.stat.exists
+
+    - name: run ZED SDK installer silently
+      command:
+        cmd: "/tmp/ZED_SDK_Installer.run -- silent"
+      when: not zed_sdk_installed.stat.exists and not ansible_check_mode
+      # The installer automatically handles udev rules and dependencies.
+      # Reference: https://www.stereolabs.com/docs/development/zed-sdk/linux

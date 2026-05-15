@@ -1,0 +1,32 @@
+---
+- name: system setup for workstation
+  hosts: localhost
+  connection: local
+  become: true
+  vars:
+    target_user: "arika"
+    rustdesk_version: "1.2.3"
+    ubuntu_codename: "noble"
+    dots_path: "/home/arika/Hyprland-Dots"
+    installer_path: "/tmp/hyprland-installer"
+
+  tasks:
+    - name: setup user arika
+      import_tasks: ../../common_tasks/user_setup.yml
+    - name: install docker
+      import_tasks: ../../common_tasks/docker.yml
+
+    - name: setup isaac sim and lab
+      import_tasks: tasks/isaac.yml
+
+    - name: setup isolated ros2 environments
+      import_tasks: tasks/ros2_docker.yml
+
+    - name: configure passwordless sudo
+      import_tasks: ../../common_tasks/sudo_nopasswd.yml
+
+  handlers:
+    - name: Restart Docker
+      ansible.builtin.service:
+        name: docker
+        state: restarted

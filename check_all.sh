@@ -9,7 +9,14 @@ if ! command -v ansible-playbook &> /dev/null; then
 fi
 
 # List of all playbook directories
-playbooks=("personal_desktop" "server_default" "arcpro_default" "robotics_isaac_sim" "personal_docker_containers" "robotics_zed2i")
+playbooks=(
+    "fresh/desktop"
+    "fresh/server"
+    "fresh/docker"
+    "airou/robotics/isaac_sim"
+    "airou/robotics/zed2i"
+    "airou/arcpro"
+)
 
 echo "===================================================="
 echo "Starting global check for all playbooks"
@@ -22,7 +29,7 @@ for p in "${playbooks[@]}"; do
         echo "----------------------------------------------------"
         cd "$p"
         ./run.sh --check
-        cd ..
+        cd - > /dev/null
     else
         echo "Warning: Directory $p not found, skipping."
     fi
