@@ -1,0 +1,110 @@
+---
+- name: Setup Jetson Orin Nano Flash Environment
+  hosts: localhost
+  connection: local
+  become: true
+  vars:
+    target_user: "arika"
+    work_dir: "/home/{{ target_user }}/jetson_reflash"
+    l4t_version: "36.3.0"
+    driver_pkg_url: "https://developer.nvidia.com/downloads/embedded/l4t/r36_release_v3.0/release/jetson_linux_r36.3.0_aarch64.tbz2"
+    rootfs_pkg_url: "https://developer.nvidia.com/downloads/embedded/l4t/r36_release_v3.0/release/tegra_linux_sample-root-filesystem_r36.3.0_aarch64.tbz2"
+    driver_pkg_name: "jetson_linux_r36.3.0_aarch64.tbz2"
+    rootfs_pkg_name: "tegra_linux_sample-root-filesystem_r36.3.0_aarch64.tbz2"
+
+  tasks:
+    - name: Create working directory
+      file:
+        path: "{{ work_dir }}"
+        state: directory
+        owner: "{{ target_user }}"
+        group: "{{ target_user }}"
+        mode: '0755'
+
+    - name: Check available disk space
+      ansible.builtin.shell:
+        cmd: df -BG --output=avail {{ work_dir }} | tail -n 1 | tr -d 'G '
+      register: disk_space_avail
+      changed_when: false
+      check_mode: no
+
+    - name: Fail if disk space is insufficient (requires ~15GB)
+      fail:
+        msg: "Insufficient disk space. Available: {{ disk_space_avail.stdout }}GB, Required: 15GB"
+      when: not ansible_check_mode and disk_space_avail.stdout | int < 15
+
+    - name: Download Driver Package and RootFS simultaneously
+      get_url:
+        url: "{{ item.url }}"
+        dest: "{{ work_dir }}/{{ item.name }}"
+        owner: "{{ target_user }}"
+        group: "{{ target_user }}"
+      async: 3600
+      poll: 0
+      loop:
+        - { url: "{{ driver_pkg_url }}", name: "{{ driver_pkg_name }}" }
+        - { url: "{{ rootfs_pkg_url }}", name: "{{ rootfs_pkg_name }}" }
+      register: download_jobs
+      when: not ansible_check_mode
+
+    - name: Wait for downloads to complete
+      async_status:
+        jid: "{{ item.ansible_job_id }}"
+      loop: "{{ download_jobs.results }}"
+      register: job_results
+      until: job_results.finished
+      retries: 60
+      delay: 10
+      when: not ansible_check_mode
+
+    - name: Extract Driver Package
+      become_user: "{{ target_user }}"
+      unarchive:
+        src: "{{ work_dir }}/{{ driver_pkg_name }}"
+        dest: "{{ work_dir }}"
+        remote_src: yes
+        creates: "{{ work_dir }}/Linux_for_Tegra"
+      when: not ansible_check_mode
+
+    - name: Create rootfs directory
+      file:
+        path: "{{ work_dir }}/Linux_for_Tegra/rootfs"
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Extract Sample Root File System
+      command:
+        cmd: "tar xpf {{ work_dir }}/{{ rootfs_pkg_name }} -C {{ work_dir }}/Linux_for_Tegra/rootfs/"
+      args:
+        creates: "{{ work_dir }}/Linux_for_Tegra/rootfs/usr/bin/ls"
+      when: not ansible_check_mode
+
+    - name: Install flash prerequisites
+      command:
+        cmd: "./tools/l4t_flash_prerequisites.sh"
+        chdir: "{{ work_dir }}/Linux_for_Tegra"
+      when: not ansible_check_mode
+
+    - name: Apply binaries
+      command:
+        cmd: "./apply_binaries.sh"
+        chdir: "{{ work_dir }}/Linux_for_Tegra"
+      when: not ansible_check_mode
+
+    - name: Create flash.sh script
+      copy:
+        dest: "{{ work_dir }}/flash.sh"
+        content: |
+          #!/bin/bash
+          # Jetson Orin Nano Flash Script (NVMe)
+          # Ensure device is in Force Recovery Mode (ID 0955:7523)
+          
+          cd Linux_for_Tegra
+          sudo ./tools/kernel_flash/l4t_initrd_flash.sh --external-device nvme0n1p1 \
+            -c tools/kernel_flash/flash_l4t_t234_nvme.xml -p "-c bootloader/generic/cfg/flash_t234_qspi.xml" \
+            --showlogs --network usb0 jetson-orin-nano-devkit internal
+        owner: "{{ target_user }}"
+        group: "{{ target_user }}"
+        mode: '0755'

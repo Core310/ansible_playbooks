@@ -21,6 +21,7 @@
 - [x] Move `robotics` under `airou` **(DONE)**
 - [x] Update wallpaper directory paths in Desktop configs **(DONE)**
 - [x] Update root README and `check_all.sh` with new structure **(DONE)**
+- [x] Add Jetson Orin Nano flash playbook to `airou/jetson_flash` **(DONE)**
 - [ ] Validation: Test camera connectivity and ROS 2 topic publishing **(TODO 1)**
 
 ## RESUME HERE

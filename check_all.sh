@@ -16,6 +16,7 @@ playbooks=(
     "airou/robotics/isaac_sim"
     "airou/robotics/zed2i"
     "airou/arcpro"
+    "airou/jetson_flash"
 )
 
 echo "===================================================="

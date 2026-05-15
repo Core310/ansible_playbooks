@@ -6,6 +6,7 @@ A collection of Ansible playbooks for automating the setup of robotics workstati
 
 ### 🐕 [Airou](./airou)
 *   **[ArcPro](./airou/arcpro):** Specialized setup for ArcPro hardware and campus networking.
+*   **[Jetson Flash](./airou/jetson_flash):** Automated setup and flashing tools for Jetson Orin Nano (NVMe).
 *   **[Robotics](./airou/robotics):**
     *   **[Isaac Sim](./airou/robotics/isaac_sim):** Super station for NVIDIA Isaac Sim, Lab, and ROS 2 containers.
     *   **[ZED 2i](./airou/robotics/zed2i):** Host SDK and udev rules for Stereolabs cameras.
