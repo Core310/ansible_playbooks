@@ -26,12 +26,12 @@ A collection of Ansible playbooks for automating the setup of robotics workstati
 ### 1. [Personal Desktop](./personal_desktop)
 **Goal:** Sets up a full graphical robotics workstation for the user `arika`.
 *   **Desktop:** Hyprland, Waybar, custom Dotfiles (JaKooLit), and Fastfetch.
-*   **Shell:** Zsh with Oh My Zsh (Agnosterzak theme), syntax highlighting, and custom ROS 2 aliases.
-*   **Software:** ROS 2 Jazzy, Docker (GPU support), Discord, Steam, Obsidian, Tailscale, JetBrains Toolbox.
+*   **Shell:** Zsh with Oh My Zsh (Agnosterzak theme), syntax highlighting.
+*   **Software:** Docker (GPU support), Discord, Steam, Obsidian, Tailscale, JetBrains Toolbox.
 
 ### 2. [Headless Server](./server_default)
 **Goal:** A lean, command-line only version of the personal desktop.
-*   **Core:** ROS 2 Jazzy, Python 3, Docker, Tailscale.
+*   **Core:** Python 3, Docker, Tailscale.
 *   **Shell:** Same Zsh environment and aliases as the desktop, but without graphical dependencies.
 *   **Convenience:** Tmux with persistent sessions and passwordless sudo.
 

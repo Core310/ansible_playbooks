@@ -1,15 +1,21 @@
-# Project State: ZED 2i Integration
+# Project State: ZED 2i Integration & Workspace Cleanup
 
-## MILESTONE 1: Hardware Integration
-### Phase 1: ZED 2i Setup
-- [ ] Research: Confirm ZED SDK compatibility with Ubuntu 24.04 and CUDA 12.x **(TODO 1)**
-- [ ] Strategy: Decide between Host-based vs Docker-based SDK installation **(TODO 2)**
-- [ ] Implementation: Create `robotics_zed` playbook with Udev rules and SDK installer **(TODO 3)**
-- [ ] Implementation: Integrate ZED ROS 2 wrapper into `robotics_isaac_sim` docker-compose **(TODO 4)**
-- [ ] Validation: Test camera connectivity and ROS 2 topic publishing **(TODO 5)**
+## MILESTONE 1: Hardware Integration & Cleanup
+### Phase 1: Workspace Cleanup
+- [x] Remove CVAT playbook **(DONE)**
+- [x] Remove ROS 2 Jazzy from `personal_desktop` **(DONE)**
+- [x] Remove ROS 2 Jazzy from `server_default` **(DONE)**
+- [x] Update documentation (READMEs) and `check_all.sh` **(DONE)**
+
+### Phase 2: ZED 2i Setup
+- [x] Research: Confirm ZED SDK 5.3 compatibility with Ubuntu 24.04 **(DONE)**
+- [x] Strategy: Implement Host+Docker hybrid setup **(DONE)**
+- [x] Implementation: Create `robotics_zed2i` playbook with SDK installer **(DONE)**
+- [x] Implementation: Integrate ZED ROS 2 wrapper into `robotics_isaac_sim` docker-compose **(DONE)**
+- [ ] Validation: Test camera connectivity and ROS 2 topic publishing **(TODO 1)**
 
 ## RESUME HERE
-- **MILESTONE:** Hardware Integration
+- **MILESTONE:** Hardware Integration & Cleanup
 - **Phase:** ZED 2i Setup
-- **Sub-phase:** Research
-- **Next Todo:** Research: Confirm ZED SDK compatibility with Ubuntu 24.04 and CUDA 12.x
+- **Sub-phase:** Validation
+- **Next Todo:** Validation: Test camera connectivity and ROS 2 topic publishing

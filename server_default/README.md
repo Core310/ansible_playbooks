@@ -6,7 +6,6 @@ This playbook sets up a headless server environment with applications and tools 
 
 This playbook installs the following:
 
-*   **ROS 2 Jazzy:** The Robot Operating System.
 *   **Development Tools:** `python`, `pip`, `gh`, `nvm`, `node`, and `gemini-chat-cli`.
 *   **Headless Applications:** `tailscale`.
 *   **Common Tasks:** Docker, Bun.js, persistent tmux sessions, and unattended upgrades.

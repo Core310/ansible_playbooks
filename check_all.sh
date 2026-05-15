@@ -9,7 +9,7 @@ if ! command -v ansible-playbook &> /dev/null; then
 fi
 
 # List of all playbook directories
-playbooks=("personal_desktop" "server_default" "arcpro_default" "robotics_isaac_sim" "personal_docker_containers")
+playbooks=("personal_desktop" "server_default" "arcpro_default" "robotics_isaac_sim" "personal_docker_containers" "robotics_zed2i")
 
 echo "===================================================="
 echo "Starting global check for all playbooks"

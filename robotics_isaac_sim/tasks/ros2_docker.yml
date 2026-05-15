@@ -40,6 +40,22 @@
             - /dev/dri:/dev/dri
             - /home/{{ target_user }}/robotics/shared:/root/shared
           command: sleep infinity
+
+        zed:
+          image: stereolabs/zed:5.3-jazzy-devel-cuda12.1-ubuntu24.04
+          container_name: ros2_zed
+          network_mode: host
+          ipc: host
+          privileged: true
+          environment:
+            - DISPLAY=${DISPLAY}
+            - QT_X11_NO_MITSHM=1
+          volumes:
+            - /tmp/.X11-unix:/tmp/.X11-unix
+            - /dev/dri:/dev/dri
+            - /dev/bus/usb:/dev/bus/usb
+            - /home/{{ target_user }}/robotics/shared:/root/shared
+          command: sleep infinity
     owner: "{{ target_user }}"
     group: "{{ target_user }}"
 
@@ -58,6 +74,8 @@
       echo 'alias r2j="docker exec -it ros2_jazzy ros2"' | sudo -u {{ target_user }} tee -a /home/{{ target_user }}/.ansible_configs/ros2_aliases.zsh
       sudo -u {{ target_user }} grep -qF 'alias r2h="docker exec -it ros2_humble ros2"' /home/{{ target_user }}/.ansible_configs/ros2_aliases.zsh || \
       echo 'alias r2h="docker exec -it ros2_humble ros2"' | sudo -u {{ target_user }} tee -a /home/{{ target_user }}/.ansible_configs/ros2_aliases.zsh
+      sudo -u {{ target_user }} grep -qF 'alias r2z="docker exec -it ros2_zed ros2"' /home/{{ target_user }}/.ansible_configs/ros2_aliases.zsh || \
+      echo 'alias r2z="docker exec -it ros2_zed ros2"' | sudo -u {{ target_user }} tee -a /home/{{ target_user }}/.ansible_configs/ros2_aliases.zsh
       
       # Ensure it is sourced in .zshrc
       sudo -u {{ target_user }} grep -qF 'source $HOME/.ansible_configs/ros2_aliases.zsh' /home/{{ target_user }}/.zshrc || \
