@@ -9,6 +9,7 @@
     wifi_ssid: "WIFI@OU"
     wifi_username: "coe-repfb4wifi-ssa"
     target_user: airou
+    ansible_python_interpreter: /usr/bin/python3
 
   roles:
     - role: ../../../../ansible/roles/linux-arcpro

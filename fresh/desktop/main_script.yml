@@ -5,8 +5,9 @@
   become: true
   vars:
     target_user: "{{ lookup('env', 'USER') }}"
+    ansible_python_interpreter: /usr/bin/python3
     rustdesk_version: "1.2.3"
-    ubuntu_codename: "noble"
+    ubuntu_codename: "{{ ansible_distribution_release }}"
     dots_path: "/home/{{ target_user }}/Hyprland-Dots"
     installer_path: "/tmp/hyprland-installer"
 

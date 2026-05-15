@@ -5,6 +5,7 @@
   become: true
   vars:
     target_user: "{{ lookup('env', 'USER') }}"
+    ansible_python_interpreter: /usr/bin/python3
 
   tasks:
     - name: setup current user

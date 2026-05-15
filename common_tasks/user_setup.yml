@@ -3,7 +3,7 @@
   user:
     name: "{{ target_user }}"
     password: "{{ target_user_password | default('!') | password_hash('sha512') }}"
-    shell: /usr/bin/zsh
+    shell: /bin/bash
     groups: sudo,dialout,plugdev,audio,video,input,tty,bluetooth,lp
     append: yes
     state: present
