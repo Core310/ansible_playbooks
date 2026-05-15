@@ -4,7 +4,7 @@
   connection: local
   become: true
   vars:
-    target_user: "arika"
+    target_user: "{{ lookup('env', 'USER') }}"
 
   tasks:
     - name: ensure docker is installed and configured

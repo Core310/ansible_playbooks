@@ -8,14 +8,14 @@ This directory contains the global configuration rules and custom subagents for 
 The file `GEMINI.md` in this directory should be symlinked to `~/.gemini/GEMINI.md` to ensure Gemini CLI loads these rules globally across all sessions.
 
 ```bash
-ln -sf /home/arika/Documents/ansible_stuff/ansible_playbooks/gemini_rules/GEMINI.md ~/.gemini/GEMINI.md
+ln -sf /home/$USER/Documents/ansible_stuff/ansible_playbooks/app_backups/gemini_rules/GEMINI.md ~/.gemini/GEMINI.md
 ```
 
 ### Agents
 Copy or symlink the files in the `agents/` directory to `~/.gemini/agents/`.
 
 ```bash
-cp /home/arika/Documents/ansible_stuff/ansible_playbooks/gemini_rules/agents/*.md ~/.gemini/agents/
+cp /home/$USER/Documents/ansible_stuff/ansible_playbooks/app_backups/gemini_rules/agents/*.md ~/.gemini/agents/
 ```
 
 ## Rules Included

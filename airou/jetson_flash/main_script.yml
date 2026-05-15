@@ -4,7 +4,7 @@
   connection: local
   become: true
   vars:
-    target_user: "arika"
+    target_user: "{{ lookup('env', 'USER') }}"
     work_dir: "/home/{{ target_user }}/jetson_reflash"
     l4t_version: "36.3.0"
     driver_pkg_url: "https://developer.nvidia.com/downloads/embedded/l4t/r36_release_v3.0/release/jetson_linux_r36.3.0_aarch64.tbz2"

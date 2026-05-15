@@ -4,14 +4,14 @@
   connection: local
   become: true
   vars:
-    target_user: "arika"
+    target_user: "{{ lookup('env', 'USER') }}"
     rustdesk_version: "1.2.3"
     ubuntu_codename: "noble"
-    dots_path: "/home/arika/Hyprland-Dots"
+    dots_path: "/home/{{ target_user }}/Hyprland-Dots"
     installer_path: "/tmp/hyprland-installer"
 
   tasks:
-    - name: setup user arika
+    - name: setup current user
       import_tasks: ../../common_tasks/user_setup.yml
     - name: install docker
       import_tasks: ../../common_tasks/docker.yml

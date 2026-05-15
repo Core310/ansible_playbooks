@@ -1,9 +1,9 @@
 ---
-- name: Allow 'arika' to have passwordless sudo
+- name: Allow current user to have passwordless sudo
   lineinfile:
-    path: /etc/sudoers.d/90-arika-nopasswd
+    path: /etc/sudoers.d/90-{{ target_user }}-nopasswd
     state: present
     create: yes
     mode: 0440
-    line: "arika ALL=(ALL) NOPASSWD: ALL"
+    line: "{{ target_user }} ALL=(ALL) NOPASSWD: ALL"
     validate: "visudo -cf %s"

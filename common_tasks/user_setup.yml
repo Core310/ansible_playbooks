@@ -1,8 +1,8 @@
 ---
-- name: Create user arika with full permissions
+- name: Create current user with full permissions
   user:
     name: "{{ target_user }}"
-    password: "{{ arika_password | default('!') | password_hash('sha512') }}"
+    password: "{{ target_user_password | default('!') | password_hash('sha512') }}"
     shell: /usr/bin/zsh
     groups: sudo,dialout,plugdev,audio,video,input,tty,bluetooth,lp
     append: yes

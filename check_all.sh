@@ -13,8 +13,9 @@ playbooks=(
     "fresh/desktop"
     "fresh/server"
     "fresh/docker"
-    "airou/robotics/isaac_sim"
-    "airou/robotics/zed2i"
+    "airou/isaac_sim"
+    "airou/zed2i"
+    "airou/ros2"
     "airou/arcpro"
     "airou/jetson_flash"
 )

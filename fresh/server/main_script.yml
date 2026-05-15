@@ -4,10 +4,10 @@
   connection: local
   become: true
   vars:
-    target_user: "arika"
+    target_user: "{{ lookup('env', 'USER') }}"
 
   tasks:
-    - name: setup user arika
+    - name: setup current user
       import_tasks: ../../common_tasks/user_setup.yml
     - name: install docker
       import_tasks: ../../common_tasks/docker.yml

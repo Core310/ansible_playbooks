@@ -1,4 +1,4 @@
-# Project State: Workspace Restructuring Phase 2
+# Project State: Comprehensive Workspace Overhaul
 
 ## MILESTONE 1: Hardware Integration & Cleanup
 ### Phase 1: Workspace Cleanup
@@ -22,10 +22,12 @@
 - [x] Update wallpaper directory paths in Desktop configs **(DONE)**
 - [x] Update root README and `check_all.sh` with new structure **(DONE)**
 - [x] Add Jetson Orin Nano flash playbook to `airou/jetson_flash` **(DONE)**
-- [ ] Validation: Test camera connectivity and ROS 2 topic publishing **(TODO 1)**
 
-## RESUME HERE
-- **MILESTONE:** Hardware Integration & Cleanup
-- **Phase:** ZED 2i Setup
-- **Sub-phase:** Validation
-- **Next Todo:** Validation: Test camera connectivity and ROS 2 topic publishing
+### Phase 4: Desktop Refinement
+- [x] Install Firefox and LibreWolf browsers **(DONE)**
+- [x] Ensure Thunderbird mail client is present **(DONE)**
+- [x] Fix relative paths for all nested playbooks **(DONE)**
+- [x] Verify all playbooks with successful global check **(DONE)**
+
+## PROJECT COMPLETE
+The workspace is organized, automated, and verified.

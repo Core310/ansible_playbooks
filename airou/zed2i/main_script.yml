@@ -4,7 +4,7 @@
   connection: local
   become: true
   vars:
-    target_user: "arika"
+    target_user: "{{ lookup('env', 'USER') }}"
     zed_sdk_version: "5.3"
     zed_sdk_url: "https://download.stereolabs.com/zedsdk/5.3/cu12/ubuntu24"
 

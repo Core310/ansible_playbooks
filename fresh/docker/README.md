@@ -13,7 +13,7 @@ This playbook acts as a modular add-on to sync and download your core Docker ima
 
 ## Usage
 
-This is designed to be run on an existing profile. It will use the `arika` user variables.
+This is designed to be run on an existing profile. It will use the dynamic `target_user` variables.
 
 ```bash
 ./run.sh
