@@ -1,5 +1,17 @@
 ---
-- name: Install Bun.js
-  shell: curl -fsSL https://bun.sh/install | bash
+- name: download bun.js installer
+  get_url:
+    url: https://bun.sh/install
+    dest: /tmp/bun_install.sh
+    mode: '0755'
+
+- name: install bun.js
+  become_user: "{{ target_user }}"
+  command: /tmp/bun_install.sh
   args:
     creates: "/home/{{ target_user }}/.bun/bin/bun"
+
+- name: cleanup bun installer
+  file:
+    path: /tmp/bun_install.sh
+    state: absent

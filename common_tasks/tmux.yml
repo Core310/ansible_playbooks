@@ -13,6 +13,10 @@
   copy:
     dest: "/home/{{ target_user }}/.tmux.conf"
     content: |
+      # 256-color support
+      set -g default-terminal "tmux-256color"
+      set -ga terminal-overrides ",*256col*:Tc"
+
       # List of plugins
       set -g @plugin 'tmux-plugins/tpm'
       set -g @plugin 'tmux-plugins/tmux-sensible'

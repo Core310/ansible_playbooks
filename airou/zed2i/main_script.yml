@@ -7,7 +7,9 @@
     target_user: "{{ lookup('env', 'USER') }}"
     ansible_python_interpreter: /usr/bin/python3
     zed_sdk_version: "5.3"
-    zed_sdk_url: "https://download.stereolabs.com/zedsdk/5.3/cu12/ubuntu24"
+    # URLs for different platforms
+    zed_url_ubuntu: "https://download.stereolabs.com/zedsdk/5.3/cu12/ubuntu24"
+    zed_url_jetson: "https://download.stereolabs.com/zedsdk/5.3/l4t36.4/jetsons"
 
   tasks:
     - name: install dependencies
@@ -18,6 +20,14 @@
           - wget
         state: present
         update_cache: yes
+
+    - name: set SDK download URL based on architecture
+      set_fact:
+        zed_sdk_url: "{{ zed_url_jetson if ansible_architecture == 'aarch64' else zed_url_ubuntu }}"
+
+    - name: debug selected SDK URL
+      debug:
+        msg: "Detected architecture: {{ ansible_architecture }}. Using URL: {{ zed_sdk_url }}"
 
     - name: check if ZED SDK is installed
       stat:

@@ -56,7 +56,7 @@
               command: sleep infinity
 
             zed:
-              image: stereolabs/zed:5.3-jazzy-devel-cuda12.1-ubuntu24.04
+              image: "{{ 'stereolabs/zed:5.3-devel-l4t-r36.4' if ansible_architecture == 'aarch64' else 'stereolabs/zed:5.3-jazzy-devel-cuda12.1-ubuntu24.04' }}"
               container_name: ros2_zed
               network_mode: host
               ipc: host
@@ -90,6 +90,12 @@
           echo 'alias r2h="docker exec -it ros2_humble ros2"' | sudo -u {{ target_user }} tee -a /home/{{ target_user }}/.ansible_configs/ros2_aliases.zsh
           sudo -u {{ target_user }} grep -qF 'alias r2z="docker exec -it ros2_zed ros2"' /home/{{ target_user }}/.ansible_configs/ros2_aliases.zsh || \
           echo 'alias r2z="docker exec -it ros2_zed ros2"' | sudo -u {{ target_user }} tee -a /home/{{ target_user }}/.ansible_configs/ros2_aliases.zsh
+          
+          # Standard ROS 2 helper aliases
+          echo 'alias r2="ros2"' | sudo -u {{ target_user }} tee -a /home/{{ target_user }}/.ansible_configs/ros2_aliases.zsh
+          echo 'alias tlist="ros2 topic list"' | sudo -u {{ target_user }} tee -a /home/{{ target_user }}/.ansible_configs/ros2_aliases.zsh
+          echo 'alias tinfo="ros2 topic info"' | sudo -u {{ target_user }} tee -a /home/{{ target_user }}/.ansible_configs/ros2_aliases.zsh
+          echo 'alias techo="ros2 topic echo"' | sudo -u {{ target_user }} tee -a /home/{{ target_user }}/.ansible_configs/ros2_aliases.zsh
           
           # Ensure it is sourced in .zshrc
           sudo -u {{ target_user }} grep -qF 'source $HOME/.ansible_configs/ros2_aliases.zsh' /home/{{ target_user }}/.zshrc || \

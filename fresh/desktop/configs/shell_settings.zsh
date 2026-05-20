@@ -1,6 +1,3 @@
-# ROS 2 environment
-source /opt/ros/jazzy/setup.zsh
-
 # Oh My Zsh configuration
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="agnosterzak"
@@ -21,21 +18,9 @@ alias settings='nano ~/.zshrc'
 alias l='ls'
 alias ls='ls --color=auto'
 
-# ROS 2 helpers
-alias r2="ros2"
-alias src="source install/setup.sh"
-alias tlist="r2 topic list"
-alias tinfo="r2 topic info"
-alias techo="r2 topic echo"
-alias vf="ros2 run tf2_tools view_frames"
-
-# Colcon build helpers
-alias cbf="colcon build --parallel-workers $(nproc) --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release"
-alias clean="rm -rf build/ install/ log/"
-
 # tmux helpers
-alias tma="tmux attach -t"
-alias tmn="tmux new -t"
+alias tma='tmux attach -t'
+alias tmn='tmux new -t'
 
 # Path exports
 export PATH="/usr/local/cuda-13.0/bin:$PATH"
