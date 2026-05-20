@@ -22,7 +22,7 @@ A collection of Ansible playbooks for automating the setup of robotics workstati
 
 ### 🍃 [Fresh](./fresh)
 *   **[Desktop](./fresh/desktop):** Full graphical workstation setup.
-    *   **Includes:** Hyprland (Waybar/Dots), Oh My Zsh (Custom theme), Docker, Bun.js, Python, Node.js (NVM).
+    *   **Includes:** Hyprland (Waybar/Dots), Oh My Zsh (Custom theme), Docker, Bun.js, Python, Node.js (NVM), AGI CLI.
     *   **Browsers:** Firefox, LibreWolf.
     *   **Apps:** Discord (Vencord), Obsidian, Telegram, Todoist, Zotero, Steam, JetBrains Toolbox.
 *   **[Server](./fresh/server):** Lean, command-line only version of the desktop.

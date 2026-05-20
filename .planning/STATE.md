@@ -17,7 +17,7 @@
 
 ### Phase 3: Workspace Restructuring
 - [x] Create category folders: `robotics`, `fresh`, `airou` **(DONE)**
-- [x] Move background and gemini_rules to `app_backups` **(DONE)**
+- [x] Move background and agi_rules to `app_backups` **(DONE)**
 - [x] Move `robotics` under `airou` **(DONE)**
 - [x] Update wallpaper directory paths in Desktop configs **(DONE)**
 - [x] Update root README and `check_all.sh` with new structure **(DONE)**

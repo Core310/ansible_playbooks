@@ -1,21 +1,21 @@
-# Gemini Global Rules
+# AGI Global Rules
 
-This directory contains the global configuration rules and custom subagents for Gemini CLI.
+This directory contains the global configuration rules and custom subagents for AGI CLI.
 
 ## Setup
 
 ### Rules
-The file `GEMINI.md` in this directory should be symlinked to `~/.gemini/GEMINI.md` to ensure Gemini CLI loads these rules globally across all sessions.
+The file `AGI.md` in this directory should be symlinked to `~/.agi/AGI.md` to ensure AGI CLI loads these rules globally across all sessions.
 
 ```bash
-ln -sf /home/$USER/Documents/ansible_stuff/ansible_playbooks/app_backups/gemini_rules/GEMINI.md ~/.gemini/GEMINI.md
+ln -sf /home/$USER/Documents/ansible_stuff/ansible_playbooks/app_backups/agi_rules/AGI.md ~/.agi/AGI.md
 ```
 
 ### Agents
-Copy or symlink the files in the `agents/` directory to `~/.gemini/agents/`.
+Copy or symlink the files in the `agents/` directory to `~/.agi/agents/`.
 
 ```bash
-cp /home/$USER/Documents/ansible_stuff/ansible_playbooks/app_backups/gemini_rules/agents/*.md ~/.gemini/agents/
+cp /home/$USER/Documents/ansible_stuff/ansible_playbooks/app_backups/agi_rules/agents/*.md ~/.agi/agents/
 ```
 
 ## Rules Included

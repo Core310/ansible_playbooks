@@ -17,7 +17,7 @@ You are a specialized agent responsible for maintaining project health and repor
 
 When invoked, you must perform the following tasks:
 
-1.  **Check Health**: Run `node "$HOME/.gemini/get-shit-done/bin/gsd-tools.cjs" validate health` and `node "$HOME/.gemini/get-shit-done/bin/gsd-tools.cjs" validate consistency`. Identify any project inconsistencies, stale branches, or planning gaps.
+1.  **Check Health**: Run `node "$HOME/.agi/get-shit-done/bin/gsd-tools.cjs" validate health` and `node "$HOME/.agi/get-shit-done/bin/gsd-tools.cjs" validate consistency`. Identify any project inconsistencies, stale branches, or planning gaps.
 2.  **Auto Repair**: If mechanical issues are found, suggest running the health check with the `--repair` flag.
 3.  **Update Map**: Do NOT run `gsd refresh codebase map`. Instead, use the `@gsd-codebase-mapper` subagent to refresh the codebase map if it is stale or missing.
 4.  **Detect Drift**: Compare the current git status with the state defined in `.planning/STATE.md`. Identify "uncommitted drift" where tasks are marked as complete in the plan but have not been committed.
