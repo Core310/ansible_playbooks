@@ -23,7 +23,7 @@
 
     - name: set SDK download URL based on architecture
       set_fact:
-        zed_sdk_url: "{{ zed_url_jetson if ansible_architecture == 'aarch64' else zed_url_ubuntu }}"
+        zed_sdk_url: "{{ zed_url_jetson if (ansible_architecture == 'aarch64' or ansible_architecture == 'arm64') else zed_url_ubuntu }}"
 
     - name: debug selected SDK URL
       debug:
@@ -34,11 +34,18 @@
         path: /usr/local/zed/tools/ZED_Diagnostic
       register: zed_sdk_installed
 
+    - name: remove old installer if present
+      file:
+        path: "/tmp/ZED_SDK_Installer.run"
+        state: absent
+      when: not zed_sdk_installed.stat.exists
+
     - name: download ZED SDK installer
       get_url:
         url: "{{ zed_sdk_url }}"
         dest: "/tmp/ZED_SDK_Installer.run"
         mode: '0755'
+        force: yes
       when: not zed_sdk_installed.stat.exists
 
     - name: run ZED SDK installer silently
