@@ -6,7 +6,7 @@ This playbook sets up a headless server environment with applications and tools 
 
 This playbook installs the following:
 
-*   **Development Tools:** `python`, `pip`, `gh`, `nvm`, `node`, and `agi-cli`.
+*   **Development Tools:** `python`, `pip`, `gh`, `nvm`, `node`, and `agy-cli`.
 *   **Headless Applications:** `tailscale`.
 *   **Common Tasks:** Docker, Bun.js, persistent tmux sessions, and unattended upgrades.
 

@@ -10,6 +10,8 @@
     # URLs for different platforms
     zed_url_ubuntu: "https://download.stereolabs.com/zedsdk/5.3/cu12/ubuntu24"
     zed_url_jetson: "https://download.stereolabs.com/zedsdk/5.3/l4t36.4/jetsons"
+    # Set to true to run the long AI optimization process (30-60 mins)
+    zed_optimize_ai: false
 
   tasks:
     - name: install dependencies
@@ -54,3 +56,7 @@
       when: not zed_sdk_installed.stat.exists and not ansible_check_mode
       # The installer automatically handles udev rules and dependencies.
       # Reference: https://www.stereolabs.com/docs/development/zed-sdk/linux
+ocal/zed/tools/ZED_Diagnostic -aio"
+      when: zed_optimize_ai | bool and not ansible_check_mode
+      # This task uses TensorRT to optimize models for the specific GPU.
+

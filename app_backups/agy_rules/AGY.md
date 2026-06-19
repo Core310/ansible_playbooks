@@ -1,4 +1,4 @@
-## Gemini Added Memories
+## Agy Added Memories
 - Confirmation: I must never proceed to execute a new project phase without explicit user approval. I must stop after completing each individual subtask (todo) to wait for user confirmation before moving to the next one.
 - Style: No emojis, no italics. Bold is permitted ONLY for the first word of a bullet point.
 - Formatting: Bullet points must be denoted using '-' and math must be wrapped in $.

@@ -1,21 +1,28 @@
-# AGI Global Rules
+# AGY Global Rules
 
-This directory contains the global configuration rules and custom subagents for AGI CLI.
+This directory contains the global configuration rules and custom subagents for AGY CLI.
 
 ## Setup
 
 ### Rules
-The file `AGI.md` in this directory should be symlinked to `~/.agi/AGI.md` to ensure AGI CLI loads these rules globally across all sessions.
+The file `AGY.md` in this directory should be symlinked to `~/.agy/AGY.md` to ensure AGY CLI loads these rules globally across all sessions.
 
 ```bash
-ln -sf /home/$USER/Documents/ansible_stuff/ansible_playbooks/app_backups/agi_rules/AGI.md ~/.agi/AGI.md
+ln -sf /home/$USER/Documents/ansible_stuff/ansible_playbooks/app_backups/agy_rules/AGY.md ~/.agy/AGY.md
 ```
 
 ### Agents
-Copy or symlink the files in the `agents/` directory to `~/.agi/agents/`.
+Copy or symlink the files in the `agents/` directory to `~/.agy/agents/`.
 
 ```bash
-cp /home/$USER/Documents/ansible_stuff/ansible_playbooks/app_backups/agi_rules/agents/*.md ~/.agi/agents/
+cp /home/$USER/Documents/ansible_stuff/ansible_playbooks/app_backups/agy_rules/agents/*.md ~/.agy/agents/
+```
+
+### Skills
+Copy or symlink the directories in the `skills/` directory to `~/.agy/skills/`.
+
+```bash
+cp -r /home/$USER/Documents/ansible_stuff/ansible_playbooks/app_backups/agy_rules/skills/* ~/.agy/skills/
 ```
 
 ## Rules Included

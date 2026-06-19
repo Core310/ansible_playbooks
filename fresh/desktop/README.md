@@ -7,7 +7,7 @@ This playbook sets up a personalized desktop environment on Ubuntu 24.04 (Noble)
 This playbook installs the following:
 
 *   **Desktop Environment:** Hyprland with Waybar and custom dots.
-*   **Development Tools:** Python, Node.js, GitHub CLI, AGI CLI.
+*   **Development Tools:** Python, Node.js, GitHub CLI, AGY CLI.
 *   **Applications:** Discord, Obsidian, Steam, Tailscale, JetBrains Toolbox, and more.
 *   **Common Tasks:** Docker, Bun.js, persistent tmux sessions, and unattended upgrades.
 
