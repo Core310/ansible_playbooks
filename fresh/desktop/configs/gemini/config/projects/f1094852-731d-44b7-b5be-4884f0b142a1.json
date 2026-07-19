@@ -1,0 +1,14 @@
+{
+  "id": "f1094852-731d-44b7-b5be-4884f0b142a1",
+  "name": "/home/arika",
+  "projectResources": {
+    "resources": [
+      {
+        "gitFolder": {
+          "folderUri": "file:///home/arika",
+          "allowWrite": true
+        }
+      }
+    ]
+  }
+}

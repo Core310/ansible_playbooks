@@ -30,7 +30,7 @@ Run the provided wrapper script:
 
 ### Manual Execution
 ```bash
-ansible-playbook -i inventory.ini main_script.yml --ask-vault-pass -K
+ansible-playbook -i inventory.ini main_script.yml
 ```
 
 ## Requirements

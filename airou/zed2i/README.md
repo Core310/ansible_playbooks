@@ -18,12 +18,12 @@ Run the provided wrapper script:
 
 ### Manual Execution
 ```bash
-ansible-playbook -i inventory.ini main_script.yml -K
+ansible-playbook -i inventory.ini main_script.yml
 ```
 
 ## Integration with Docker
 
-The ZED SDK on the host provides the necessary drivers and udev rules. You can then run ZED-enabled ROS 2 containers (like the one in `robotics_isaac_sim`) and they will have access to the hardware.
+The ZED SDK on the host provides the necessary drivers and udev rules. You can then run ZED-enabled ROS 2 containers (like the one in `airou/isaac_sim`) and they will have access to the hardware.
 
 ## Requirements
 

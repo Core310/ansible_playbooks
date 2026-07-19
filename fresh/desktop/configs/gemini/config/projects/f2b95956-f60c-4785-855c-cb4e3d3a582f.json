@@ -1,0 +1,14 @@
+{
+  "id": "f2b95956-f60c-4785-855c-cb4e3d3a582f",
+  "name": "/home/arika/Documents/arcpro/arcpro_system/src/examples/ARCPro_RL/arc_rl_isacc_sim",
+  "projectResources": {
+    "resources": [
+      {
+        "gitFolder": {
+          "folderUri": "file:///home/arika/Documents/arcpro/arcpro_system/src/examples/ARCPro_RL/arc_rl_isacc_sim",
+          "allowWrite": true
+        }
+      }
+    ]
+  }
+}

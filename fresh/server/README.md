@@ -12,15 +12,15 @@ This playbook installs the following:
 
 ## Usage
 
-The easiest way to run this playbook is using the provided wrapper script, which handles the Ansible Vault password prompt:
+The easiest way to run this playbook is using the provided wrapper script:
 
 ```bash
 ./run.sh
 ```
 
 ### Manual Execution
-If you prefer to run it manually, you must provide the vault password and the become (sudo) password:
+If you prefer to run it manually:
 
 ```bash
-ansible-playbook -i inventory.ini main_script.yml --ask-vault-pass -K
+ansible-playbook -i inventory.ini main_script.yml
 ```

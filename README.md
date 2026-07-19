@@ -50,9 +50,8 @@ All playbooks automatically apply these standards:
     ```
 2.  **Run a Playbook (e.g., Desktop):**
     ```bash
-    cd fresh/desktop && ./run.sh -K
+    cd fresh/desktop && ./run.sh
     ```
-    *(Note: Use `-K` only for the very first run to provide your sudo password. Subsequent runs will be passwordless.)*
 
 ## 🏁 Global Check
 To verify the integrity of all playbooks without making changes:

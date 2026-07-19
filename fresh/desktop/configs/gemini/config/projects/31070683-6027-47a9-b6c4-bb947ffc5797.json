@@ -1,0 +1,11 @@
+{
+  "id": "31070683-6027-47a9-b6c4-bb947ffc5797",
+  "name": "/home/arika/Documents/ansible_stuff/ansible_playbooks",
+  "projectResources": {
+    "resources": [
+      {
+        "folderUri": "file:///home/arika/Documents/ansible_stuff/ansible_playbooks"
+      }
+    ]
+  }
+}
