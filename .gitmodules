@@ -1,0 +1,3 @@
+[submodule "fresh/home_lab"]
+	path = fresh/home_lab
+	url = https://github.com/Core310/home_lab.git
