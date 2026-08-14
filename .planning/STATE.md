@@ -29,5 +29,25 @@
 - [x] Fix relative paths for all nested playbooks **(DONE)**
 - [x] Verify all playbooks with successful global check **(DONE)**
 
-## PROJECT COMPLETE
-The workspace is organized, automated, and verified.
+## MILESTONE 2: Autonomous Driving & RL Refinement
+### Active Issues & Telemetry
+- [ ] **Motion / Driving Direction**: Vehicle is currently driving backwards during execution/training runs. Need to inspect motor command polarity / cmd_vel velocity mapping or RL reward penalty for backward velocity.
+- [x] **Log Cleanup**: Removed old training and debug logs. **(DONE)**
+
+## MILESTONE 3: FOSS Homelab Infrastructure
+### Phase 5: Docker Container Standardization & Homelab Deployment
+- [x] Convert Podman to native Docker & Docker Compose across all home_lab stacks. **(DONE)**
+- [x] Create standalone `run.sh` entry points for all stacks (`anime`, `music`, `utility`, `pihole`). **(DONE)**
+- [x] Centralize and relocate all Docker images and storage to 1.8 TB `D` drive (`/home/arika/D/docker`, `/home/arika/D/media`). **(DONE)**
+- [x] Fix VERT build dependency conflict (upgraded `svelte-stripe` for Svelte 5 SSR compatibility, frozen lockfile). **(DONE)**
+- [x] Deploy and verify Utility Stack (Portainer, Beszel Hub/Agent, BentoPDF, VERT). **(DONE)**
+
+## MILESTONE 4: Automated Job Application Pipeline (ApplyPilot)
+### Phase 6: CSV-Driven ApplyPilot Automation Stack
+- [ ] Target Architecture: Create `home_lab/job_applier` Ansible stack.
+- [ ] Implement `applypilot_runner.py` Python orchestrator for CSV batching (`jobs.csv` with status transitions).
+- [ ] Create `plain_text_resume.yaml` master resume schema and `.env` secrets template.
+- [ ] Build `site.yml` playbook with automated Python venv, Google Chrome / Playwright browser setup, and background service runner.
+
+## PROJECT STATUS
+Milestones 1 & 3 complete. Milestone 4 planned. Milestone 2 in progress.

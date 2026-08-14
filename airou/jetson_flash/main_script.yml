@@ -4,7 +4,7 @@
   connection: local
   become: true
   vars:
-    target_user: "{{ lookup('env', 'USER') }}"
+    target_user: "{{ lookup('env', 'SUDO_USER') if (lookup('env', 'SUDO_USER') != '' and lookup('env', 'SUDO_USER') != 'root') else lookup('env', 'USER') }}"
     ansible_python_interpreter: /usr/bin/python3
     work_dir: "/home/{{ target_user }}/jetson_reflash"
     l4t_version: "36.3.0"

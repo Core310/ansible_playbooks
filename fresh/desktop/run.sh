@@ -9,4 +9,8 @@ if ! command -v ansible-playbook &> /dev/null; then
 fi
 
 # Any additional arguments passed to this script will be passed to ansible-playbook.
-ansible-playbook -i inventory.ini main_script.yml "$@"
+if [ "$EUID" -ne 0 ] && [[ "$*" != *"-K"* ]] && [[ "$*" != *"--ask-become-pass"* ]]; then
+    exec sudo -E ansible-playbook -i inventory.ini main_script.yml "$@"
+else
+    ansible-playbook -i inventory.ini main_script.yml "$@"
+fi

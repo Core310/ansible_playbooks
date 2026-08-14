@@ -16,31 +16,20 @@
       - thunderbird
       - gnome-calendar
       - firefox
+      - flatpak
     state: present
-
-- name: add librewolf gpg key
-  ansible.builtin.shell:
-    cmd: curl -fsSL https://deb.librewolf.net/keyring.gpg | gpg --dearmor -o /usr/share/keyrings/librewolf.gpg
-    creates: /usr/share/keyrings/librewolf.gpg
-
-- name: add librewolf repository
-  apt_repository:
-    repo: "deb [arch={{ 'amd64' if ansible_architecture == 'x86_64' else 'arm64' }} signed-by=/usr/share/keyrings/librewolf.gpg] https://deb.librewolf.net {{ ubuntu_codename }} main"
-    filename: librewolf
-    state: present
-
-- name: install librewolf
-  apt:
-    name: librewolf
-    state: present
-    update_cache: yes
-  when: not ansible_check_mode
 
 - name: ensure flathub repository is enabled
   flatpak_remote:
     name: flathub
     state: present
     flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
+
+- name: install waterfox via flatpak
+  flatpak:
+    name: net.waterfox.waterfox
+    state: present
+    remote: flathub
 
 - name: install steam via flatpak
   flatpak:
