@@ -44,10 +44,11 @@
 
 ## MILESTONE 4: Automated Job Application Pipeline (ApplyPilot)
 ### Phase 6: CSV-Driven ApplyPilot Automation Stack
-- [ ] Target Architecture: Create `home_lab/job_applier` Ansible stack.
-- [ ] Implement `applypilot_runner.py` Python orchestrator for CSV batching (`jobs.csv` with status transitions).
-- [ ] Create `plain_text_resume.yaml` master resume schema and `.env` secrets template.
-- [ ] Build `site.yml` playbook with automated Python venv, Google Chrome / Playwright browser setup, and background service runner.
+- [x] Target Architecture: Create `home_lab/job_applier` Ansible stack. **(DONE)**
+- [x] Implement `applypilot_runner.py` Python orchestrator for CSV batching (`jobs.csv` with status transitions). **(DONE)**
+- [x] Create `plain_text_resume.yaml` master resume schema and `.env.example` secrets template. **(DONE)**
+- [x] Build `site.yml` playbook with automated Python venv, Google Chrome / Playwright browser setup, and batch runner. **(DONE)**
+- [x] Test end-to-end dry-run batch execution and atomic CSV state updates. **(DONE)**
 
 ## PROJECT STATUS
-Milestones 1 & 3 complete. Milestone 4 planned. Milestone 2 in progress.
+Milestones 1, 3 & 4 complete. Milestone 2 in progress.
