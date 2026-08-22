@@ -27,8 +27,12 @@
     - name: development tools
       import_tasks: tasks/dev_tools.yml
 
+    - name: cta framework and skills
+      import_tasks: ../../common_tasks/cta.yml
+
     - name: desktop applications and base system
       import_tasks: tasks/apps.yml
+
 
     - name: install zsh extras
       import_tasks: ../../common_tasks/zsh_extras.yml

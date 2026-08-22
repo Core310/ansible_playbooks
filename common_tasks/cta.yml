@@ -1,0 +1,80 @@
+---
+- name: ensure local bin and skill directories exist
+  become_user: "{{ target_user }}"
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '0755'
+  loop:
+    - "/home/{{ target_user }}/.local/bin"
+    - "/home/{{ target_user }}/.gemini/config/skills"
+    - "/home/{{ target_user }}/.agy/skills"
+
+- name: ensure CTA CLI scripts are executable in repository
+  file:
+    path: "{{ playbook_dir }}/../../cta/bin/{{ item }}"
+    mode: '0755'
+  loop:
+    - cta_engine.py
+    - cta_fetch.py
+  when: not ansible_check_mode
+
+- name: create cta executable wrapper in ~/.local/bin
+  become_user: "{{ target_user }}"
+  copy:
+    dest: "/home/{{ target_user }}/.local/bin/cta"
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '0755'
+    content: |
+      #!/usr/bin/env bash
+      exec python3 "{{ playbook_dir }}/../../cta/bin/cta_engine.py" "$@"
+  when: not ansible_check_mode
+
+- name: create cta-fetch executable wrapper in ~/.local/bin
+  become_user: "{{ target_user }}"
+  copy:
+    dest: "/home/{{ target_user }}/.local/bin/cta-fetch"
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '0755'
+    content: |
+      #!/usr/bin/env bash
+      exec python3 "{{ playbook_dir }}/../../cta/bin/cta_fetch.py" "$@"
+  when: not ansible_check_mode
+
+- name: symlink CTA skills to ~/.gemini/config/skills
+  become_user: "{{ target_user }}"
+  file:
+    src: "{{ playbook_dir }}/../../cta/skills/{{ item }}"
+    dest: "/home/{{ target_user }}/.gemini/config/skills/{{ item }}"
+    state: link
+    force: yes
+  loop:
+    - cta-init
+    - cta-mapper
+    - cta-query
+    - cta-planner
+    - cta-executor
+    - cta-clear
+    - cta-resume
+  when: not ansible_check_mode
+
+- name: symlink CTA skills to ~/.agy/skills
+  become_user: "{{ target_user }}"
+  file:
+    src: "{{ playbook_dir }}/../../cta/skills/{{ item }}"
+    dest: "/home/{{ target_user }}/.agy/skills/{{ item }}"
+    state: link
+    force: yes
+  loop:
+    - cta-init
+    - cta-mapper
+    - cta-query
+    - cta-planner
+    - cta-executor
+    - cta-clear
+    - cta-resume
+  when: not ansible_check_mode

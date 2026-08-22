@@ -1,31 +1,29 @@
 #!/usr/bin/env bash
-# CTA Installer and Updater Script
-# Manages CTA CLI binaries, Git commit-hash update verification, and skill symlinks.
+# CTA Skills Installer & Updater
+# Location: Content root of the Ansible playbooks repository.
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "${SCRIPT_DIR}/../../../../.." && pwd)"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CTA_DIR="${REPO_ROOT}/cta"
 BIN_DIR="${HOME}/.local/bin"
 GEMINI_SKILLS_DIR="${HOME}/.gemini/config/skills"
 AGY_SKILLS_DIR="${HOME}/.agy/skills"
 
 show_help() {
   cat <<EOF
-CTA Installation & Update Management Tool
+CTA Framework Installer & Manager
 
 Usage:
-  ./install_cta.sh [options]
+  ./install-cta-skills.sh [options]
 
 Options:
-  --install         Install CTA CLI tools and link skills to ~/.gemini and ~/.agy
-  --update          Check git commit hash, pull latest updates, and refresh links
-  --check           Check if remote updates exist by comparing git commit hashes
+  --install         Install CLI tools to ~/.local/bin and symlink skills
+  --update          Check git commit hash, pull updates, and refresh links
+  --check           Check for updates by comparing local vs remote commit hashes
   --help            Show this help message
 
-Examples:
-  ./install_cta.sh --install
-  ./install_cta.sh --update
+Default action (no args): runs --install
 EOF
 }
 
@@ -50,76 +48,67 @@ check_updates() {
       echo "Could not reach remote origin. Skipping remote check."
       return 0
     fi
-  else
-    echo "Not a Git repository at ${REPO_ROOT}."
-    return 0
   fi
+  return 0
 }
 
 install_cta() {
-  echo "Installing CTA Framework..."
+  echo "Installing CTA Framework from ${CTA_DIR}..."
   mkdir -p "${BIN_DIR}"
   mkdir -p "${GEMINI_SKILLS_DIR}"
   mkdir -p "${AGY_SKILLS_DIR}"
 
-  CTA_ENGINE="${SCRIPT_DIR}/cta-init/scripts/cta_engine.py"
-  CTA_FETCH="${SCRIPT_DIR}/cta-init/scripts/cta_fetch.py"
+  CTA_ENGINE="${CTA_DIR}/bin/cta_engine.py"
+  CTA_FETCH="${CTA_DIR}/bin/cta_fetch.py"
 
   chmod +x "${CTA_ENGINE}" "${CTA_FETCH}"
 
-  # Create executable wrapper for cta
+  # Create executable wrapper for cta in ~/.local/bin
   cat <<WRAPPER > "${BIN_DIR}/cta"
 #!/usr/bin/env bash
 exec python3 "${CTA_ENGINE}" "\$@"
 WRAPPER
   chmod +x "${BIN_DIR}/cta"
 
-  # Create executable wrapper for cta-fetch
+  # Create executable wrapper for cta-fetch in ~/.local/bin
   cat <<WRAPPER > "${BIN_DIR}/cta-fetch"
 #!/usr/bin/env bash
 exec python3 "${CTA_FETCH}" "\$@"
 WRAPPER
   chmod +x "${BIN_DIR}/cta-fetch"
 
-  echo "Created CLI binaries:"
+  echo "Installed CLI binaries:"
   echo "  - ${BIN_DIR}/cta"
   echo "  - ${BIN_DIR}/cta-fetch"
 
-  # Link/Sync skills safely avoiding circular self-links
-  REAL_SCRIPT_DIR=$(realpath "${SCRIPT_DIR}")
-  REAL_GEMINI_DIR=$(realpath "${GEMINI_SKILLS_DIR}")
-
-  for skill_dir in "${SCRIPT_DIR}"/cta-*; do
+  # Link skills safely to ~/.gemini/config/skills and ~/.agy/skills
+  for skill_dir in "${CTA_DIR}/skills"/cta-*; do
     if [ -d "${skill_dir}" ]; then
       skill_name=$(basename "${skill_dir}")
       
-      # Only link to gemini if it is a physically distinct directory
-      if [ "${REAL_SCRIPT_DIR}" != "${REAL_GEMINI_DIR}" ]; then
-        rm -rf "${GEMINI_SKILLS_DIR}/${skill_name}"
-        ln -sf "${skill_dir}" "${GEMINI_SKILLS_DIR}/${skill_name}"
-      fi
+      # Link to Gemini
+      rm -rf "${GEMINI_SKILLS_DIR}/${skill_name}"
+      ln -sf "${skill_dir}" "${GEMINI_SKILLS_DIR}/${skill_name}"
 
-      # Link to ~/.agy/skills
-      REAL_AGY_DIR=$(realpath "${AGY_SKILLS_DIR}")
-      if [ "${REAL_SCRIPT_DIR}" != "${REAL_AGY_DIR}" ]; then
-        rm -rf "${AGY_SKILLS_DIR}/${skill_name}"
-        ln -sf "${skill_dir}" "${AGY_SKILLS_DIR}/${skill_name}"
-      fi
+      # Link to AGY
+      rm -rf "${AGY_SKILLS_DIR}/${skill_name}"
+      ln -sf "${skill_dir}" "${AGY_SKILLS_DIR}/${skill_name}"
     fi
   done
 
   echo "Linked CTA skills to ~/.gemini/config/skills and ~/.agy/skills."
 
+  # PATH verification
   if [[ ":$PATH:" != *":$BIN_DIR:"* ]]; then
     echo ""
-    echo "NOTE: ${BIN_DIR} is not currently in your \$PATH."
-    echo "Add it to your ~/.bashrc or ~/.zshrc:"
+    echo "NOTE: ${BIN_DIR} is not in your current PATH."
+    echo "Ensure it is exported in ~/.bashrc or ~/.zshrc:"
     echo "  export PATH=\"\$HOME/.local/bin:\$PATH\""
   fi
 
   echo ""
-  echo "Installation Complete!"
-  "${BIN_DIR}/cta" --help | head -n 8
+  echo "CTA Installation Successful!"
+  "${BIN_DIR}/cta" --help | head -n 6
 }
 
 update_cta() {
@@ -127,9 +116,9 @@ update_cta() {
   if [ -d "${REPO_ROOT}/.git" ]; then
     cd "${REPO_ROOT}"
     LOCAL_BEFORE=$(git rev-parse --short HEAD)
-    echo "Fetching and pulling latest changes..."
+    echo "Pulling latest repository changes..."
     git pull --ff-only origin main || {
-      echo "Warning: git pull failed or has merge conflicts. Please resolve manually."
+      echo "Warning: git pull failed. Please resolve manually."
     }
     LOCAL_AFTER=$(git rev-parse --short HEAD)
     echo "Repository updated: ${LOCAL_BEFORE} -> ${LOCAL_AFTER}"
