@@ -23,6 +23,7 @@ alias tma='tmux attach -t'
 alias tmn='tmux new -t'
 
 # Path exports
-export PATH="/usr/local/cuda-13.0/bin:$PATH"
+export PATH="$HOME/.local/bin:/usr/local/cuda-13.0/bin:$PATH"
 export LD_LIBRARY_PATH="/usr/local/cuda-13.0/lib64:$LD_LIBRARY_PATH"
 export UE4_ROOT=~/UnrealEngine_4.26
+

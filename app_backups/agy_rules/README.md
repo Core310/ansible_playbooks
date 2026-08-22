@@ -47,3 +47,4 @@ cp -r /home/$USER/Documents/ansible_stuff/ansible_playbooks/app_backups/agy_rule
 
 - **course**: Use `/course` to transform any codebase into a beautiful, interactive single-page HTML course.
 - **grug-brained-refactorer**: A specialized skill to detect and eliminate over-engineering ("bounciness" and unnecessary object-oriented abstractions) using Grug Brained Developer principles and Pylint structural analysis.
+- **cta**: Use `/cta-clear` and `/cta-resume` for token-efficient RAG indexing, incremental Git diff tracking, and persistent context lifecycle management via SQLite.

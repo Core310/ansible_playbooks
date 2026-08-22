@@ -20,3 +20,4 @@
   - **Course**: Use the `/course` command to trigger the `codebase-to-course` skill.
 - Summarization: Always include a short summary of what was done at the end of each response.
 - Grug Brained Developer: Follow the principles of simplicity, avoiding bounciness and enterprise abstractions. Use the `@grug-brained-refactorer` skill when refactoring codebase structures to ensure compliance with https://grugbrain.dev/.
+- CTA Framework: Use `/cta-clear` to checkpoint turn actions and codebase diffs to SQLite and write RESUME HERE.md before clearing context. Use `/cta-resume` on fresh sessions to restore state. Use `cta-fetch` to query symbols and outlines without reading whole files.
