@@ -19,3 +19,4 @@
   - **Cleanup**: Use the `@cleanup` subagent for health checks and codebase mapping.
   - **Course**: Use the `/course` command to trigger the `codebase-to-course` skill.
 - Summarization: Always include a short summary of what was done at the end of each response.
+- Grug Brained Developer: Follow the principles of simplicity, avoiding bounciness and enterprise abstractions. Use the `@grug-brained-refactorer` skill when refactoring codebase structures to ensure compliance with https://grugbrain.dev/.

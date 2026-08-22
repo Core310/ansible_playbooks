@@ -46,3 +46,12 @@
   args:
     executable: /bin/bash
   when: not ansible_check_mode
+
+- name: install and link cta skills and cli tools
+  become_user: "{{ target_user }}"
+  shell: |
+    bash "{{ playbook_dir }}/configs/gemini/config/skills/install_cta.sh" --install
+  args:
+    executable: /bin/bash
+  when: not ansible_check_mode
+
