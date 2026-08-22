@@ -666,7 +666,7 @@ def generate_yaml_guides(workspace: Path) -> None:
         "# CTA Codebase Map & RAG Query Guide",
         "cta_version: '1.0'",
         f"database: '{CTA_DIR_NAME}/{CODEBASE_DB_NAME}'",
-        f"last_updated: '{datetime.datetime.utcnow().isoformat()}Z'",
+        f"last_updated: '{datetime.datetime.now(datetime.timezone.utc).isoformat()}Z'",
         f"git_commit: '{current_commit}'",
         "stats:",
         f"  total_indexed_files: {total_files}",
@@ -700,7 +700,7 @@ def generate_yaml_guides(workspace: Path) -> None:
     dir_content = [
         "# CTA Codebase Directory Structure & Architectural Layout",
         "cta_version: '1.0'",
-        f"last_updated: '{datetime.datetime.utcnow().isoformat()}Z'",
+        f"last_updated: '{datetime.datetime.now(datetime.timezone.utc).isoformat()}Z'",
         "root: '.'",
         "",
         "directories:"
@@ -780,7 +780,7 @@ def log_turn_action(workspace: Path, session_id: str, milestone: str, phase: str
     conn = sqlite3.connect(turns_db)
     cur = conn.cursor()
     
-    ts = datetime.datetime.utcnow().isoformat() + "Z"
+    ts = datetime.datetime.now(datetime.timezone.utc).isoformat() + "Z"
     files_json = json.dumps(files or [])
     
     cur.execute("""
@@ -801,7 +801,7 @@ def log_learning_or_concern(workspace: Path, session_id: str, kind: str, categor
     conn = sqlite3.connect(turns_db)
     cur = conn.cursor()
     
-    ts = datetime.datetime.utcnow().isoformat() + "Z"
+    ts = datetime.datetime.now(datetime.timezone.utc).isoformat() + "Z"
     files_json = json.dumps(files or [])
     
     cur.execute("""
@@ -820,7 +820,7 @@ def create_checkpoint(workspace: Path, milestone: str, phase: str, task: str,
     init_turns_db(turns_db)
     
     current_commit = get_git_commit(workspace)
-    ts = datetime.datetime.utcnow().isoformat() + "Z"
+    ts = datetime.datetime.now(datetime.timezone.utc).isoformat() + "Z"
     resume_file = workspace / RESUME_FILE
     
     conn = sqlite3.connect(turns_db)
