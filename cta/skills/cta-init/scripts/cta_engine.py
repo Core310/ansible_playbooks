@@ -27,13 +27,15 @@ RESUME_FILE = "RESUME HERE.md"
 IGNORED_DIRS = {
     ".git", ".cta", ".planning", ".venv", "venv", "node_modules",
     "__pycache__", ".pytest_cache", ".mypy_cache", "dist", "build",
-    ".idea", ".vscode", ".cargo", "target", "bin", "obj", ".gemini"
+    ".idea", ".vscode", ".cargo", "target", "bin", "obj", ".gemini",
+    "logs", "archive", "openStreetUSD"
 }
 
 IGNORED_EXTENSIONS = {
     ".png", ".jpg", ".jpeg", ".gif", ".ico", ".svg", ".webp",
     ".mp4", ".mov", ".avi", ".pdf", ".zip", ".tar", ".gz",
-    ".exe", ".bin", ".iso", ".lock", ".pyc", ".pyd", ".so", ".dylib"
+    ".exe", ".bin", ".iso", ".lock", ".pyc", ".pyd", ".so", ".dylib",
+    ".usd", ".usda", ".usdc", ".pt", ".npy", ".npz"
 }
 
 # -----------------------------------------------------------------------------
