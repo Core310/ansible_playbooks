@@ -226,6 +226,86 @@ def fetch_file_slice(workspace: Path, file_path: str, start_line: int, end_line:
     except Exception as e:
         return f"Error reading slice: {e}"
 
+def fetch_swarm_packet(workspace: Path, task_id: str) -> str:
+    turns_db = get_turns_db(workspace)
+    codebase_db = get_codebase_db(workspace)
+    
+    if not turns_db.exists():
+        return f"Error: Database {turns_db} does not exist."
+        
+    conn = sqlite3.connect(turns_db)
+    conn.row_factory = sqlite3.Row
+    cur = conn.cursor()
+    
+    cur.execute("SELECT * FROM swarm_tasks WHERE task_id = ?", (task_id,))
+    task_row = cur.fetchone()
+    if not task_row:
+        conn.close()
+        return f"Error: Task '{task_id}' not found in swarm_tasks."
+        
+    t_dict = dict(task_row)
+    run_id = t_dict["run_id"]
+    
+    cur.execute("SELECT milestone, phase, topology FROM swarm_runs WHERE run_id = ?", (run_id,))
+    run_row = cur.fetchone()
+    milestone = run_row["milestone"] if run_row else "M001"
+    phase = run_row["phase"] if run_row else "01"
+    topology = run_row["topology"] if run_row else "scatter_gather"
+    
+    cur.execute("""
+    SELECT from_task, message_type, payload, timestamp 
+    FROM swarm_messages 
+    WHERE run_id = ? AND (to_task = ? OR to_task = 'ALL') 
+    ORDER BY id ASC
+    """, (run_id, task_id))
+    messages = [dict(r) for r in cur.fetchall()]
+    conn.close()
+    
+    target_files = json.loads(t_dict["target_files"] or "[]")
+    target_symbols = json.loads(t_dict["target_symbols"] or "[]")
+    
+    symbol_snippets = []
+    if codebase_db.exists() and target_symbols:
+        c_conn = sqlite3.connect(codebase_db)
+        c_cur = c_conn.cursor()
+        for sym in target_symbols:
+            c_cur.execute("""
+            SELECT file_path, name, kind, line_start, line_end, signature, docstring
+            FROM symbols WHERE name = ? OR name LIKE ?
+            LIMIT 2
+            """, (sym, f"%{sym}%"))
+            for fp, sname, skind, ls, le, sig, doc in c_cur.fetchall():
+                d_first = f" - {doc.splitlines()[0]}" if doc else ""
+                symbol_snippets.append(f"- `{sname}` ({skind}) at {fp}:{ls}-{le}\n  Signature: `{sig}`{d_first}")
+        c_conn.close()
+        
+    out = [
+        f"### CTA Swarm Task Packet: {t_dict['task_id']}",
+        f"- **Run ID**: {run_id} | **Topology**: {topology}",
+        f"- **Milestone**: {milestone} | **Phase**: {phase}",
+        f"- **Title**: {t_dict['title']}",
+        f"- **Role**: {t_dict['role']}",
+        f"- **Status**: {t_dict['status']} (Attempt #{t_dict['attempt_count']}/{t_dict['max_retries']})",
+        f"- **Target Files**: {', '.join(target_files) if target_files else 'None'}",
+        f"- **Deterministic Gate**: `{t_dict['verification_cmd'] or 'pytest / compiler / linter'}`",
+    ]
+    
+    if symbol_snippets:
+        out.append("\n#### Ground-Truth Symbols (from cta_codebase.db):")
+        out.extend(symbol_snippets)
+    elif target_symbols:
+        out.append(f"\n#### Target Symbols: {', '.join(target_symbols)}")
+        
+    if messages:
+        out.append("\n#### Inter-Task Contracts & Messages:")
+        for m in messages:
+            out.append(f"- **[{m['message_type']}]** from {m['from_task']}: {m['payload']}")
+            
+    if t_dict.get("traceback_log"):
+        out.append(f"\n#### Previous Attempt Error Traceback (Fix this):\n```\n{t_dict['traceback_log']}\n```")
+        
+    return "\n".join(out)
+
 def main():
     parser = argparse.ArgumentParser(description="CTA Fetch: Token-Efficient SQLite Code & State Retrieval")
     parser.add_argument("--workspace", "-w", default=".", help="Workspace root path")
@@ -251,6 +331,9 @@ def main():
     p_sl.add_argument("file", help="File path")
     p_sl.add_argument("start", type=int, help="Start line (1-indexed)")
     p_sl.add_argument("end", type=int, help="End line (1-indexed)")
+
+    p_sw = subparsers.add_parser("swarm-packet", help="Fetch minimal context packet for a claimed swarm task")
+    p_sw.add_argument("task_id", help="Task ID from swarm_tasks")
     
     args = parser.parse_args()
     workspace = find_workspace(Path(args.workspace))
@@ -267,6 +350,8 @@ def main():
         print(fetch_turn_history(workspace, args.limit))
     elif args.command == "slice":
         print(fetch_file_slice(workspace, args.file, args.start, args.end))
+    elif args.command == "swarm-packet":
+        print(fetch_swarm_packet(workspace, args.task_id))
     else:
         parser.print_help()
 

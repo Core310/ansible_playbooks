@@ -60,6 +60,7 @@
     - cta-executor
     - cta-clear
     - cta-resume
+    - cta-swarm
   when: not ansible_check_mode
 
 - name: symlink CTA skills to ~/.agy/skills
@@ -77,4 +78,5 @@
     - cta-executor
     - cta-clear
     - cta-resume
+    - cta-swarm
   when: not ansible_check_mode

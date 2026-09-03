@@ -109,6 +109,56 @@ def init_turns_db(db_path: Path) -> None:
     );
     """)
     
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS swarm_runs (
+        run_id TEXT PRIMARY KEY,
+        session_id TEXT,
+        milestone TEXT,
+        phase TEXT,
+        topology TEXT,
+        status TEXT,
+        total_tasks INTEGER DEFAULT 0,
+        completed_tasks INTEGER DEFAULT 0,
+        started_at TEXT,
+        completed_at TEXT
+    );
+    """)
+    
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS swarm_tasks (
+        task_id TEXT PRIMARY KEY,
+        run_id TEXT,
+        title TEXT,
+        role TEXT,
+        status TEXT,
+        target_files TEXT,
+        target_symbols TEXT,
+        verification_cmd TEXT,
+        claimed_by TEXT,
+        claimed_at TEXT,
+        attempt_count INTEGER DEFAULT 0,
+        max_retries INTEGER DEFAULT 2,
+        exit_code INTEGER,
+        traceback_log TEXT,
+        summary TEXT,
+        completed_at TEXT,
+        FOREIGN KEY(run_id) REFERENCES swarm_runs(run_id) ON DELETE CASCADE
+    );
+    """)
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS swarm_messages (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        run_id TEXT,
+        from_task TEXT,
+        to_task TEXT,
+        message_type TEXT,
+        payload TEXT,
+        timestamp TEXT,
+        FOREIGN KEY(run_id) REFERENCES swarm_runs(run_id) ON DELETE CASCADE
+    );
+    """)
+    
     conn.commit()
     conn.close()
 
@@ -916,6 +966,244 @@ def load_resume_state(workspace: Path) -> Dict[str, Any]:
     }
 
 # -----------------------------------------------------------------------------
+# Swarm Blackboard & Coordination Engine
+# -----------------------------------------------------------------------------
+
+def swarm_dispatch(workspace: Path, session_id: str, milestone: str, phase: str, 
+                   topology: str, tasks_data: List[Dict[str, Any]], run_id: Optional[str] = None) -> Dict[str, Any]:
+    turns_db = get_turns_db_path(workspace)
+    init_turns_db(turns_db)
+    
+    if not run_id:
+        ts_slug = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d_%H%M%S")
+        run_id = f"run_{ts_slug}_{hashlib.md5(json.dumps(tasks_data).encode()).hexdigest()[:6]}"
+        
+    file_conflicts = []
+    if topology == "scatter_gather":
+        seen_files: Dict[str, str] = {}
+        for t in tasks_data:
+            tid = t.get("task_id", "unknown")
+            for f in t.get("target_files", []):
+                if f in seen_files:
+                    file_conflicts.append(f"File '{f}' claimed by both '{seen_files[f]}' and '{tid}'")
+                seen_files[f] = tid
+                
+    conn = sqlite3.connect(turns_db)
+    cur = conn.cursor()
+    
+    ts = datetime.datetime.now(datetime.timezone.utc).isoformat() + "Z"
+    total_tasks = len(tasks_data)
+    
+    cur.execute("""
+    INSERT INTO swarm_runs (run_id, session_id, milestone, phase, topology, status, total_tasks, completed_tasks, started_at)
+    VALUES (?, ?, ?, ?, ?, 'IN_PROGRESS', ?, 0, ?)
+    """, (run_id, session_id, milestone, phase, topology, total_tasks, ts))
+    
+    for t in tasks_data:
+        tid = t.get("task_id") or f"task_{hashlib.md5(t.get('title', '').encode()).hexdigest()[:6]}"
+        title = t.get("title", "Untitled Task")
+        role = t.get("role", "worker")
+        t_files = json.dumps(t.get("target_files", []))
+        t_symbols = json.dumps(t.get("target_symbols", []))
+        v_cmd = t.get("verification_cmd", "")
+        max_retries = int(t.get("max_retries", 2))
+        
+        cur.execute("""
+        INSERT INTO swarm_tasks (task_id, run_id, title, role, status, target_files, target_symbols, verification_cmd, max_retries)
+        VALUES (?, ?, ?, ?, 'PENDING', ?, ?, ?, ?)
+        """, (tid, run_id, title, role, t_files, t_symbols, v_cmd, max_retries))
+        
+    conn.commit()
+    conn.close()
+    
+    return {
+        "run_id": run_id,
+        "topology": topology,
+        "total_tasks": total_tasks,
+        "file_conflicts": file_conflicts,
+        "status": "IN_PROGRESS"
+    }
+
+def swarm_claim(workspace: Path, worker_id: str, run_id: Optional[str] = None, role: Optional[str] = None) -> Optional[Dict[str, Any]]:
+    turns_db = get_turns_db_path(workspace)
+    init_turns_db(turns_db)
+    
+    conn = sqlite3.connect(turns_db)
+    conn.row_factory = sqlite3.Row
+    cur = conn.cursor()
+    
+    query = """
+    SELECT task_id, run_id, title, role, target_files, target_symbols, verification_cmd, attempt_count, max_retries, traceback_log
+    FROM swarm_tasks
+    WHERE status = 'PENDING'
+    """
+    params: List[Any] = []
+    
+    if run_id:
+        query += " AND run_id = ?"
+        params.append(run_id)
+    if role:
+        query += " AND role = ?"
+        params.append(role)
+        
+    query += " ORDER BY attempt_count ASC, task_id ASC LIMIT 1"
+    cur.execute(query, params)
+    row = cur.fetchone()
+    
+    if not row:
+        conn.close()
+        return None
+        
+    task_dict = dict(row)
+    task_id = task_dict["task_id"]
+    ts = datetime.datetime.now(datetime.timezone.utc).isoformat() + "Z"
+    
+    cur.execute("""
+    UPDATE swarm_tasks
+    SET status = 'CLAIMED', claimed_by = ?, claimed_at = ?, attempt_count = attempt_count + 1
+    WHERE task_id = ?
+    """, (worker_id, ts, task_id))
+    
+    conn.commit()
+    conn.close()
+    
+    task_dict["status"] = "CLAIMED"
+    task_dict["claimed_by"] = worker_id
+    task_dict["claimed_at"] = ts
+    task_dict["attempt_count"] += 1
+    task_dict["target_files"] = json.loads(task_dict["target_files"] or "[]")
+    task_dict["target_symbols"] = json.loads(task_dict["target_symbols"] or "[]")
+    return task_dict
+
+def swarm_report(workspace: Path, task_id: str, status: str, exit_code: int = 0, 
+                 summary: str = "", traceback: str = "", files: Optional[List[str]] = None) -> Dict[str, Any]:
+    turns_db = get_turns_db_path(workspace)
+    init_turns_db(turns_db)
+    
+    conn = sqlite3.connect(turns_db)
+    conn.row_factory = sqlite3.Row
+    cur = conn.cursor()
+    
+    cur.execute("SELECT task_id, run_id, title, role, attempt_count, max_retries FROM swarm_tasks WHERE task_id = ?", (task_id,))
+    task_row = cur.fetchone()
+    if not task_row:
+        conn.close()
+        return {"error": f"Task '{task_id}' not found in swarm_tasks"}
+        
+    run_id = task_row["run_id"]
+    attempt_count = task_row["attempt_count"]
+    max_retries = task_row["max_retries"]
+    ts = datetime.datetime.now(datetime.timezone.utc).isoformat() + "Z"
+    files_list = files or []
+    
+    cur.execute("SELECT milestone, phase FROM swarm_runs WHERE run_id = ?", (run_id,))
+    run_row = cur.fetchone()
+    milestone = run_row["milestone"] if run_row else "M001"
+    phase = run_row["phase"] if run_row else "01"
+    
+    normalized_status = status.upper()
+    if normalized_status == "PASSED":
+        cur.execute("""
+        UPDATE swarm_tasks
+        SET status = 'PASSED', exit_code = ?, summary = ?, completed_at = ?
+        WHERE task_id = ?
+        """, (exit_code, summary, ts, task_id))
+        
+        files_json = json.dumps(files_list)
+        cur.execute("""
+        INSERT INTO turn_actions (session_id, timestamp, milestone, phase, task, action_type, description, status, files_touched, output_summary)
+        VALUES (?, ?, ?, ?, ?, 'EXECUTION', ?, 'SUCCESS', ?, ?)
+        """, ("swarm-session", ts, milestone, phase, task_id, task_row["title"], files_json, summary))
+        
+        cur.execute("UPDATE swarm_runs SET completed_tasks = completed_tasks + 1 WHERE run_id = ?", (run_id,))
+        cur.execute("SELECT total_tasks, completed_tasks FROM swarm_runs WHERE run_id = ?", (run_id,))
+        r_info = cur.fetchone()
+        if r_info and r_info["completed_tasks"] >= r_info["total_tasks"]:
+            cur.execute("UPDATE swarm_runs SET status = 'COMPLETED', completed_at = ? WHERE run_id = ?", (ts, run_id))
+            
+        final_state = "PASSED"
+    else:
+        if attempt_count >= max_retries:
+            cur.execute("""
+            UPDATE swarm_tasks
+            SET status = 'FAILED', exit_code = ?, traceback_log = ?, summary = ?, completed_at = ?
+            WHERE task_id = ?
+            """, (exit_code, traceback, summary, ts, task_id))
+            
+            cur.execute("""
+            INSERT INTO learnings_concerns (session_id, timestamp, kind, category, title, details, related_files, is_resolved)
+            VALUES (?, ?, 'issue', 'swarm_failure', ?, ?, ?, 0)
+            """, ("swarm-session", ts, f"Swarm Task Failed: {task_row['title']}", traceback or summary, json.dumps(files_list)))
+            final_state = "FAILED"
+        else:
+            cur.execute("""
+            UPDATE swarm_tasks
+            SET status = 'PENDING', exit_code = ?, traceback_log = ?, summary = ?
+            WHERE task_id = ?
+            """, (exit_code, traceback, summary, task_id))
+            final_state = f"RETRYING (Attempt {attempt_count}/{max_retries})"
+            
+    conn.commit()
+    conn.close()
+    return {"task_id": task_id, "run_id": run_id, "status": final_state}
+
+def swarm_post_message(workspace: Path, run_id: str, from_task: str, to_task: str, 
+                       message_type: str, payload: str) -> int:
+    turns_db = get_turns_db_path(workspace)
+    init_turns_db(turns_db)
+    
+    conn = sqlite3.connect(turns_db)
+    cur = conn.cursor()
+    ts = datetime.datetime.now(datetime.timezone.utc).isoformat() + "Z"
+    
+    cur.execute("""
+    INSERT INTO swarm_messages (run_id, from_task, to_task, message_type, payload, timestamp)
+    VALUES (?, ?, ?, ?, ?, ?)
+    """, (run_id, from_task, to_task, message_type, payload, ts))
+    
+    mid = cur.lastrowid
+    conn.commit()
+    conn.close()
+    return mid or 0
+
+def swarm_status(workspace: Path, run_id: Optional[str] = None) -> Dict[str, Any]:
+    turns_db = get_turns_db_path(workspace)
+    if not turns_db.exists():
+        return {"error": f"Database {turns_db} does not exist."}
+        
+    conn = sqlite3.connect(turns_db)
+    conn.row_factory = sqlite3.Row
+    cur = conn.cursor()
+    
+    if run_id:
+        cur.execute("SELECT * FROM swarm_runs WHERE run_id = ?", (run_id,))
+    else:
+        cur.execute("SELECT * FROM swarm_runs ORDER BY started_at DESC LIMIT 1")
+    run_row = cur.fetchone()
+    
+    if not run_row:
+        conn.close()
+        return {"error": "No swarm runs found in workspace."}
+        
+    active_run_id = run_row["run_id"]
+    cur.execute("SELECT * FROM swarm_tasks WHERE run_id = ? ORDER BY task_id ASC", (active_run_id,))
+    tasks = [dict(r) for r in cur.fetchall()]
+    
+    cur.execute("SELECT * FROM swarm_messages WHERE run_id = ? ORDER BY id ASC", (active_run_id,))
+    messages = [dict(r) for r in cur.fetchall()]
+    conn.close()
+    
+    for t in tasks:
+        t["target_files"] = json.loads(t["target_files"] or "[]")
+        t["target_symbols"] = json.loads(t["target_symbols"] or "[]")
+        
+    return {
+        "run": dict(run_row),
+        "tasks": tasks,
+        "messages": messages
+    }
+
+# -----------------------------------------------------------------------------
 # CLI Interface
 # -----------------------------------------------------------------------------
 
@@ -966,6 +1254,39 @@ def main():
     p_res = subparsers.add_parser("resume", help="Bootstrap context from RESUME HERE.md and SQLite")
     p_res.add_argument("--json", action="store_true", help="Output state as JSON")
     
+    p_s_dispatch = subparsers.add_parser("swarm-dispatch", help="Dispatch a multi-agent swarm run and enqueue tasks")
+    p_s_dispatch.add_argument("--run-id", help="Optional explicit run ID")
+    p_s_dispatch.add_argument("--session", default="active-session", help="Session ID")
+    p_s_dispatch.add_argument("--milestone", default="M001", help="Milestone ID")
+    p_s_dispatch.add_argument("--phase", default="01", help="Phase ID")
+    p_s_dispatch.add_argument("--topology", default="scatter_gather", choices=["scatter_gather", "generator_auditor", "divergent_research", "sentinel"], help="Swarm topology")
+    p_s_dispatch.add_argument("--tasks-json", help="JSON string or path to JSON file containing array of tasks")
+
+    p_s_claim = subparsers.add_parser("swarm-claim", help="Claim next available pending task from swarm ledger")
+    p_s_claim.add_argument("--worker-id", required=True, help="Worker or subagent ID")
+    p_s_claim.add_argument("--run-id", help="Filter by run ID")
+    p_s_claim.add_argument("--role", help="Filter by role")
+    p_s_claim.add_argument("--json", action="store_true", help="Output task packet as JSON")
+
+    p_s_report = subparsers.add_parser("swarm-report", help="Report verification results and status for a claimed task")
+    p_s_report.add_argument("--task-id", required=True, help="Task ID")
+    p_s_report.add_argument("--status", required=True, choices=["PASSED", "FAILED"], help="Verification result")
+    p_s_report.add_argument("--exit-code", type=int, default=0, help="Process exit code")
+    p_s_report.add_argument("--summary", default="", help="Summary of changes")
+    p_s_report.add_argument("--traceback", default="", help="Traceback log or error message if failed")
+    p_s_report.add_argument("--files", nargs="*", default=[], help="Files touched")
+
+    p_s_msg = subparsers.add_parser("swarm-post-msg", help="Post typed message / contract update to swarm bus")
+    p_s_msg.add_argument("--run-id", required=True, help="Run ID")
+    p_s_msg.add_argument("--from-task", required=True, help="Source task ID")
+    p_s_msg.add_argument("--to-task", default="ALL", help="Target task ID or ALL")
+    p_s_msg.add_argument("--type", required=True, help="Message type e.g. CONTRACT_UPDATE, CRITIQUE, ADVICE")
+    p_s_msg.add_argument("--payload", required=True, help="Message body or JSON payload")
+
+    p_s_status = subparsers.add_parser("swarm-status", help="Display status and progress of swarm runs")
+    p_s_status.add_argument("--run-id", help="Filter by run ID (defaults to latest)")
+    p_s_status.add_argument("--json", action="store_true", help="Output as JSON")
+
     args = parser.parse_args()
     workspace = Path(args.workspace).resolve()
     
@@ -1018,6 +1339,67 @@ def main():
                 print(f"Error: {data['error']}")
             else:
                 print(data["resume_content"])
+
+    elif args.command == "swarm-dispatch":
+        raw_tasks = []
+        if args.tasks_json:
+            if os.path.exists(args.tasks_json):
+                with open(args.tasks_json, "r", encoding="utf-8") as f:
+                    raw_tasks = json.load(f)
+            else:
+                raw_tasks = json.loads(args.tasks_json)
+        res = swarm_dispatch(workspace, args.session, args.milestone, args.phase, args.topology, raw_tasks, args.run_id)
+        print(f"Swarm run '{res['run_id']}' dispatched ({res['topology']}): {res['total_tasks']} tasks enqueued.")
+        if res.get("file_conflicts"):
+            print("WARNING: File conflicts detected across tasks:")
+            for c in res["file_conflicts"]:
+                print(f"  - {c}")
+
+    elif args.command == "swarm-claim":
+        task = swarm_claim(workspace, args.worker_id, args.run_id, args.role)
+        if not task:
+            print("No pending tasks available for claim.")
+        elif args.json:
+            print(json.dumps(task, indent=2))
+        else:
+            print(f"Claimed Task: [{task['task_id']}] {task['title']} (Role: {task['role']})")
+            print(f"Target Files: {', '.join(task['target_files']) if task['target_files'] else 'None'}")
+            print(f"Verification: {task['verification_cmd'] or 'None specified'}")
+
+    elif args.command == "swarm-report":
+        res = swarm_report(workspace, args.task_id, args.status, args.exit_code, args.summary, args.traceback, args.files)
+        print(f"Task '{res['task_id']}' reported: {res['status']}")
+
+    elif args.command == "swarm-post-msg":
+        mid = swarm_post_message(workspace, args.run_id, args.from_task, args.to_task, args.type, args.payload)
+        print(f"Swarm message #{mid} posted successfully.")
+
+    elif args.command == "swarm-status":
+        st = swarm_status(workspace, args.run_id)
+        if args.json:
+            print(json.dumps(st, indent=2))
+        elif "error" in st:
+            print(f"Error: {st['error']}")
+        else:
+            run = st["run"]
+            print(f"=== Swarm Run: {run['run_id']} [{run['topology']}] ===")
+            print(f"Status: {run['status']} | Progress: {run['completed_tasks']}/{run['total_tasks']} tasks")
+            print(f"Milestone: {run['milestone']} | Phase: {run['phase']}")
+            print("\nTasks:")
+            for t in st["tasks"]:
+                claimed = f"(Claimed by: {t['claimed_by']})" if t['claimed_by'] else ""
+                print(f"  - [{t['status']:9s}] {t['task_id']}: {t['title']} {claimed}")
+                if t["verification_cmd"]:
+                    print(f"      Gate: `{t['verification_cmd']}`")
+                if t["summary"]:
+                    print(f"      Summary: {t['summary']}")
+                if t["traceback_log"]:
+                    tb_first = t["traceback_log"].splitlines()[0][:80]
+                    print(f"      Traceback: {tb_first}...")
+            if st.get("messages"):
+                print("\nMessages / Contracts:")
+                for m in st["messages"]:
+                    print(f"  #{m['id']} [{m['message_type']}] from {m['from_task']} -> {m['to_task']}: {m['payload'][:80]}")
     else:
         parser.print_help()
 
