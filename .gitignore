@@ -1,3 +1,5 @@
 *.ttmp2
 .cta/
+__pycache__/
+*.pyc
 
