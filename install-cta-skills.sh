@@ -60,8 +60,9 @@ install_cta() {
 
   CTA_ENGINE="${CTA_DIR}/bin/cta_engine.py"
   CTA_FETCH="${CTA_DIR}/bin/cta_fetch.py"
+  CTA_CLEANUP="${CTA_DIR}/bin/cta_cleanup.py"
 
-  chmod +x "${CTA_ENGINE}" "${CTA_FETCH}"
+  chmod +x "${CTA_ENGINE}" "${CTA_FETCH}" "${CTA_CLEANUP}"
 
   # Create executable wrapper for cta in ~/.local/bin
   cat <<WRAPPER > "${BIN_DIR}/cta"
@@ -77,9 +78,17 @@ exec python3 "${CTA_FETCH}" "\$@"
 WRAPPER
   chmod +x "${BIN_DIR}/cta-fetch"
 
+  # Create executable wrapper for cta-cleanup in ~/.local/bin
+  cat <<WRAPPER > "${BIN_DIR}/cta-cleanup"
+#!/usr/bin/env bash
+exec python3 "${CTA_CLEANUP}" "\$@"
+WRAPPER
+  chmod +x "${BIN_DIR}/cta-cleanup"
+
   echo "Installed CLI binaries:"
   echo "  - ${BIN_DIR}/cta"
   echo "  - ${BIN_DIR}/cta-fetch"
+  echo "  - ${BIN_DIR}/cta-cleanup"
 
   # Link skills safely to ~/.gemini/config/skills and ~/.agy/skills
   for skill_dir in "${CTA_DIR}/skills"/cta-*; do

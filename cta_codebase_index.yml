@@ -1,0 +1,37 @@
+# CTA Codebase Map & RAG Query Guide
+cta_version: '1.0'
+database: '.cta/cta_codebase.db'
+last_updated: '2026-09-11T17:21:50.693507+00:00Z'
+git_commit: 'c138504b335bd5f07e417f3c19a24a394fb52d16'
+stats:
+  total_indexed_files: 385
+  total_symbols: 439
+
+domain_tags:
+  auth:
+    category: 'domain'
+    matching_entities: 4
+    sample_targets: ["airou/isaac_sim/vars/passwords.yml", "airou/arcpro/vars/arc_passwords.yml", "fresh/server/vars/passwords.yml", "fresh/desktop/vars/passwords.yml"]
+  config:
+    category: 'config'
+    matching_entities: 246
+    sample_targets: ["airou/arcpro/configs/ros2_settings.zsh", "fresh/server/configs/shell_settings.zsh", "fresh/desktop/configs/hypr_custom.zsh", "fresh/desktop/configs/shell_settings.zsh", "fresh/desktop/configs/gemini/settings.json"]
+  database:
+    category: 'layer'
+    matching_entities: 1
+    sample_targets: ["app_backups/AntennaPodBackup-2025-10-20.db"]
+  robotics:
+    category: 'domain'
+    matching_entities: 18
+    sample_targets: ["airou/ros2/inventory.ini", "airou/ros2/run.sh", "airou/ros2/main_script.yml", "airou/ros2/README.md", "airou/isaac_sim/inventory.ini"]
+  testing:
+    category: 'layer'
+    matching_entities: 2
+    sample_targets: ["fresh/desktop/configs/waybar/style/[Colorful] Rainbow Spectrum.css", "cta/skills/cta-planner/examples/spec_driven_planning_example.md"]
+
+query_templates:
+  find_symbol: "SELECT file_path, name, kind, signature, line_start FROM symbols WHERE name LIKE '%{SYMBOL}%';"
+  find_callers: "SELECT source_id, relation_type, details FROM relationships WHERE target_id = '{SYMBOL}' AND relation_type = 'calls';"
+  find_imports: "SELECT target_id, relation_type, details FROM relationships WHERE source_id = '{FILE}' AND relation_type = 'imports';"
+  search_fts: "SELECT file_path, symbol_name, kind, signature FROM codebase_fts WHERE codebase_fts MATCH '{KEYWORD}' LIMIT 20;"
+  find_by_tag: "SELECT target_id, target_type, category FROM tags WHERE tag_name = '{TAG}';"

@@ -1,0 +1,382 @@
+# CTA Codebase Directory Structure & Architectural Layout
+cta_version: '1.0'
+last_updated: '2026-09-11T17:21:50.694427+00:00Z'
+root: '.'
+
+directories:
+  airou/arcpro:
+    layer: 'general'
+    tags: []
+    primary_files: ["airou/arcpro/inventory.ini", "airou/arcpro/run.sh", "airou/arcpro/main_script.yml", "airou/arcpro/README.md"]
+  airou/arcpro/configs:
+    layer: 'config'
+    tags: ["config", "robotics"]
+    primary_files: ["airou/arcpro/configs/ros2_settings.zsh"]
+  airou/arcpro/tasks:
+    layer: 'robotics'
+    tags: ["robotics"]
+    primary_files: ["airou/arcpro/tasks/misc_tools.yml", "airou/arcpro/tasks/ros2.yml"]
+  airou/arcpro/vars:
+    layer: 'auth'
+    tags: ["auth"]
+    primary_files: ["airou/arcpro/vars/arc_passwords.yml"]
+  airou/isaac_sim:
+    layer: 'robotics'
+    tags: ["robotics"]
+    primary_files: ["airou/isaac_sim/inventory.ini", "airou/isaac_sim/run.sh", "airou/isaac_sim/main_script.yml", "airou/isaac_sim/README.md"]
+  airou/isaac_sim/tasks:
+    layer: 'robotics'
+    tags: ["robotics"]
+    primary_files: ["airou/isaac_sim/tasks/isaac.yml"]
+  airou/isaac_sim/vars:
+    layer: 'auth'
+    tags: ["auth", "robotics"]
+    primary_files: ["airou/isaac_sim/vars/passwords.yml"]
+  airou/jetson_flash:
+    layer: 'general'
+    tags: []
+    primary_files: ["airou/jetson_flash/inventory.ini", "airou/jetson_flash/run.sh", "airou/jetson_flash/main_script.yml", "airou/jetson_flash/README.md"]
+  airou/ros2:
+    layer: 'robotics'
+    tags: ["robotics"]
+    primary_files: ["airou/ros2/inventory.ini", "airou/ros2/run.sh", "airou/ros2/main_script.yml", "airou/ros2/README.md"]
+  airou/zed2i:
+    layer: 'robotics'
+    tags: ["robotics"]
+    primary_files: ["airou/zed2i/inventory.ini", "airou/zed2i/run.sh", "airou/zed2i/main_script.yml", "airou/zed2i/README.md"]
+  app_backups:
+    layer: 'database'
+    tags: ["database"]
+    primary_files: ["app_backups/AntennaPodBackup-2025-10-20.db", "app_backups/ClearVision_v6.theme.css"]
+  app_backups/agy_rules:
+    layer: 'general'
+    tags: []
+    primary_files: ["app_backups/agy_rules/rl_watchdog.md", "app_backups/agy_rules/AGY.md", "app_backups/agy_rules/README.md"]
+  app_backups/agy_rules/agents:
+    layer: 'general'
+    tags: []
+    primary_files: ["app_backups/agy_rules/agents/cleanup.md", "app_backups/agy_rules/agents/syntax-auditor.md"]
+  app_backups/agy_rules/skills/codebase-to-course:
+    layer: 'general'
+    tags: []
+    primary_files: ["app_backups/agy_rules/skills/codebase-to-course/SKILL.md", "app_backups/agy_rules/skills/codebase-to-course/README.md"]
+  app_backups/agy_rules/skills/codebase-to-course/references:
+    layer: 'general'
+    tags: []
+    primary_files: ["app_backups/agy_rules/skills/codebase-to-course/references/design-system.md", "app_backups/agy_rules/skills/codebase-to-course/references/build.sh", "app_backups/agy_rules/skills/codebase-to-course/references/gotchas.md", "app_backups/agy_rules/skills/codebase-to-course/references/interactive-elements.md", "app_backups/agy_rules/skills/codebase-to-course/references/main.js"]
+  app_backups/agy_rules/skills/grug-brained-refactorer:
+    layer: 'general'
+    tags: []
+    primary_files: ["app_backups/agy_rules/skills/grug-brained-refactorer/SKILL.md"]
+  app_backups/agy_rules/skills/grug-brained-refactorer/cleaner:
+    layer: 'general'
+    tags: []
+    primary_files: ["app_backups/agy_rules/skills/grug-brained-refactorer/cleaner/cleaner-grug-linter.py"]
+  app_backups/agy_rules/skills/gsd-advisor-researcher:
+    layer: 'general'
+    tags: []
+    primary_files: ["app_backups/agy_rules/skills/gsd-advisor-researcher/SKILL.md"]
+  app_backups/agy_rules/skills/gsd-assumptions-analyzer:
+    layer: 'general'
+    tags: []
+    primary_files: ["app_backups/agy_rules/skills/gsd-assumptions-analyzer/SKILL.md"]
+  app_backups/agy_rules/skills/gsd-codebase-mapper:
+    layer: 'general'
+    tags: []
+    primary_files: ["app_backups/agy_rules/skills/gsd-codebase-mapper/SKILL.md"]
+  app_backups/agy_rules/skills/gsd-debugger:
+    layer: 'general'
+    tags: []
+    primary_files: ["app_backups/agy_rules/skills/gsd-debugger/SKILL.md"]
+  app_backups/agy_rules/skills/gsd-executor:
+    layer: 'general'
+    tags: []
+    primary_files: ["app_backups/agy_rules/skills/gsd-executor/SKILL.md"]
+  app_backups/agy_rules/skills/gsd-integration-checker:
+    layer: 'general'
+    tags: []
+    primary_files: ["app_backups/agy_rules/skills/gsd-integration-checker/SKILL.md"]
+  app_backups/agy_rules/skills/gsd-nyquist-auditor:
+    layer: 'general'
+    tags: []
+    primary_files: ["app_backups/agy_rules/skills/gsd-nyquist-auditor/SKILL.md"]
+  app_backups/agy_rules/skills/gsd-phase-researcher:
+    layer: 'general'
+    tags: []
+    primary_files: ["app_backups/agy_rules/skills/gsd-phase-researcher/SKILL.md"]
+  app_backups/agy_rules/skills/gsd-plan-checker:
+    layer: 'general'
+    tags: []
+    primary_files: ["app_backups/agy_rules/skills/gsd-plan-checker/SKILL.md"]
+  app_backups/agy_rules/skills/gsd-planner:
+    layer: 'general'
+    tags: []
+    primary_files: ["app_backups/agy_rules/skills/gsd-planner/SKILL.md"]
+  app_backups/agy_rules/skills/gsd-project-researcher:
+    layer: 'general'
+    tags: []
+    primary_files: ["app_backups/agy_rules/skills/gsd-project-researcher/SKILL.md"]
+  app_backups/agy_rules/skills/gsd-research-synthesizer:
+    layer: 'general'
+    tags: []
+    primary_files: ["app_backups/agy_rules/skills/gsd-research-synthesizer/SKILL.md"]
+  app_backups/agy_rules/skills/gsd-roadmapper:
+    layer: 'general'
+    tags: []
+    primary_files: ["app_backups/agy_rules/skills/gsd-roadmapper/SKILL.md"]
+  app_backups/agy_rules/skills/gsd-ui-auditor:
+    layer: 'general'
+    tags: []
+    primary_files: ["app_backups/agy_rules/skills/gsd-ui-auditor/SKILL.md"]
+  app_backups/agy_rules/skills/gsd-ui-checker:
+    layer: 'general'
+    tags: []
+    primary_files: ["app_backups/agy_rules/skills/gsd-ui-checker/SKILL.md"]
+  app_backups/agy_rules/skills/gsd-ui-researcher:
+    layer: 'general'
+    tags: []
+    primary_files: ["app_backups/agy_rules/skills/gsd-ui-researcher/SKILL.md"]
+  app_backups/agy_rules/skills/gsd-user-profiler:
+    layer: 'general'
+    tags: []
+    primary_files: ["app_backups/agy_rules/skills/gsd-user-profiler/SKILL.md"]
+  app_backups/agy_rules/skills/gsd-verifier:
+    layer: 'general'
+    tags: []
+    primary_files: ["app_backups/agy_rules/skills/gsd-verifier/SKILL.md"]
+  app_backups/agy_rules/skills/syntax-auditor:
+    layer: 'general'
+    tags: []
+    primary_files: ["app_backups/agy_rules/skills/syntax-auditor/SKILL.md"]
+  common_tasks:
+    layer: 'config'
+    tags: ["config"]
+    primary_files: ["common_tasks/unattended_upgrades.yml", "common_tasks/bun.yml", "common_tasks/user_setup.yml", "common_tasks/nmtui.yml", "common_tasks/sudo_nopasswd.yml"]
+  common_tasks/files:
+    layer: 'general'
+    tags: []
+    primary_files: ["common_tasks/files/agnosterzak.zsh-theme"]
+  common_tasks/files/fastfetch:
+    layer: 'config'
+    tags: ["config"]
+    primary_files: ["common_tasks/files/fastfetch/config-v2.jsonc", "common_tasks/files/fastfetch/config.jsonc", "common_tasks/files/fastfetch/config-pokemon.jsonc", "common_tasks/files/fastfetch/config-compact.jsonc"]
+  cta:
+    layer: 'general'
+    tags: []
+    primary_files: ["cta/README.md"]
+  cta/skills/cta-cleanup:
+    layer: 'general'
+    tags: []
+    primary_files: ["cta/skills/cta-cleanup/SKILL.md", "cta/skills/cta-cleanup/README.md"]
+  cta/skills/cta-clear:
+    layer: 'general'
+    tags: []
+    primary_files: ["cta/skills/cta-clear/SKILL.md", "cta/skills/cta-clear/README.md"]
+  cta/skills/cta-clear/examples:
+    layer: 'general'
+    tags: []
+    primary_files: ["cta/skills/cta-clear/examples/checkpoint_and_clear_example.md"]
+  cta/skills/cta-executor:
+    layer: 'general'
+    tags: []
+    primary_files: ["cta/skills/cta-executor/SKILL.md", "cta/skills/cta-executor/README.md"]
+  cta/skills/cta-executor/examples:
+    layer: 'general'
+    tags: []
+    primary_files: ["cta/skills/cta-executor/examples/task_execution_example.md"]
+  cta/skills/cta-init:
+    layer: 'general'
+    tags: []
+    primary_files: ["cta/skills/cta-init/SKILL.md", "cta/skills/cta-init/README.md"]
+  cta/skills/cta-init/examples:
+    layer: 'general'
+    tags: []
+    primary_files: ["cta/skills/cta-init/examples/init_walkthrough.md"]
+  cta/skills/cta-init/scripts:
+    layer: 'general'
+    tags: []
+    primary_files: ["cta/skills/cta-init/scripts/cta_engine.py", "cta/skills/cta-init/scripts/cta_fetch.py"]
+  cta/skills/cta-mapper:
+    layer: 'general'
+    tags: []
+    primary_files: ["cta/skills/cta-mapper/SKILL.md", "cta/skills/cta-mapper/README.md"]
+  cta/skills/cta-mapper/examples:
+    layer: 'general'
+    tags: []
+    primary_files: ["cta/skills/cta-mapper/examples/incremental_mapping_example.md"]
+  cta/skills/cta-planner:
+    layer: 'general'
+    tags: []
+    primary_files: ["cta/skills/cta-planner/README.md", "cta/skills/cta-planner/SKILL.md"]
+  cta/skills/cta-planner/examples:
+    layer: 'testing'
+    tags: ["testing"]
+    primary_files: ["cta/skills/cta-planner/examples/spec_driven_planning_example.md"]
+  cta/skills/cta-query:
+    layer: 'general'
+    tags: []
+    primary_files: ["cta/skills/cta-query/SKILL.md", "cta/skills/cta-query/README.md"]
+  cta/skills/cta-query/examples:
+    layer: 'general'
+    tags: []
+    primary_files: ["cta/skills/cta-query/examples/rag_query_walkthrough.md"]
+  cta/skills/cta-resume:
+    layer: 'general'
+    tags: []
+    primary_files: ["cta/skills/cta-resume/SKILL.md", "cta/skills/cta-resume/README.md"]
+  cta/skills/cta-resume/examples:
+    layer: 'general'
+    tags: []
+    primary_files: ["cta/skills/cta-resume/examples/session_resume_example.md"]
+  cta/skills/cta-swarm:
+    layer: 'general'
+    tags: []
+    primary_files: ["cta/skills/cta-swarm/SKILL.md", "cta/skills/cta-swarm/README.md"]
+  cta/skills/cta-swarm/examples:
+    layer: 'general'
+    tags: []
+    primary_files: ["cta/skills/cta-swarm/examples/swarm_execution_walkthrough.md"]
+  fresh/desktop:
+    layer: 'general'
+    tags: []
+    primary_files: ["fresh/desktop/inventory.ini", "fresh/desktop/run.sh", "fresh/desktop/main_script.yml", "fresh/desktop/README.md"]
+  fresh/desktop/configs:
+    layer: 'config'
+    tags: ["config"]
+    primary_files: ["fresh/desktop/configs/hypr_custom.zsh", "fresh/desktop/configs/shell_settings.zsh"]
+  fresh/desktop/configs/gemini:
+    layer: 'config'
+    tags: ["config"]
+    primary_files: ["fresh/desktop/configs/gemini/settings.json"]
+  fresh/desktop/configs/gemini/config:
+    layer: 'config'
+    tags: ["config"]
+    primary_files: ["fresh/desktop/configs/gemini/config/mcp_config.json", "fresh/desktop/configs/gemini/config/config.json", "fresh/desktop/configs/gemini/config/AGENTS.md"]
+  fresh/desktop/configs/gemini/config/projects:
+    layer: 'config'
+    tags: ["config"]
+    primary_files: ["fresh/desktop/configs/gemini/config/projects/24ad8161-cbbc-4273-a5c7-dfc50396106f.json", "fresh/desktop/configs/gemini/config/projects/e19a9975-0480-4d63-826e-6b446818de30.json", "fresh/desktop/configs/gemini/config/projects/71485f75-68e6-4118-b243-c0531bf3fcc2.json", "fresh/desktop/configs/gemini/config/projects/ee989968-0355-46e1-87fd-d6b1ec50160a.json", "fresh/desktop/configs/gemini/config/projects/f1094852-731d-44b7-b5be-4884f0b142a1.json"]
+  fresh/desktop/configs/gemini/config/skills/cleanup:
+    layer: 'config'
+    tags: ["config"]
+    primary_files: ["fresh/desktop/configs/gemini/config/skills/cleanup/SKILL.md"]
+  fresh/desktop/configs/gemini/hooks:
+    layer: 'config'
+    tags: ["config"]
+    primary_files: ["fresh/desktop/configs/gemini/hooks/gsd-statusline.js", "fresh/desktop/configs/gemini/hooks/gsd-prompt-guard.js", "fresh/desktop/configs/gemini/hooks/gsd-check-update.js", "fresh/desktop/configs/gemini/hooks/gsd-workflow-guard.js", "fresh/desktop/configs/gemini/hooks/gsd-context-monitor.js"]
+  fresh/desktop/configs/gsd:
+    layer: 'config'
+    tags: ["config"]
+    primary_files: ["fresh/desktop/configs/gsd/preferences.md"]
+  fresh/desktop/configs/hypr:
+    layer: 'config'
+    tags: ["config"]
+    primary_files: ["fresh/desktop/configs/hypr/hypridle.conf", "fresh/desktop/configs/hypr/initial-boot.sh", "fresh/desktop/configs/hypr/hyprlock.conf", "fresh/desktop/configs/hypr/monitors.conf", "fresh/desktop/configs/hypr/hyprland.conf"]
+  fresh/desktop/configs/hypr/Monitor_Profiles:
+    layer: 'config'
+    tags: ["config"]
+    primary_files: ["fresh/desktop/configs/hypr/Monitor_Profiles/default.conf", "fresh/desktop/configs/hypr/Monitor_Profiles/README"]
+  fresh/desktop/configs/hypr/UserConfigs:
+    layer: 'config'
+    tags: ["config"]
+    primary_files: ["fresh/desktop/configs/hypr/UserConfigs/WindowRules-v3.conf", "fresh/desktop/configs/hypr/UserConfigs/UserDecorations.conf", "fresh/desktop/configs/hypr/UserConfigs/WorkSpaceRules.conf", "fresh/desktop/configs/hypr/UserConfigs/01-UserDefaults.conf", "fresh/desktop/configs/hypr/UserConfigs/WorkSpaceRules"]
+  fresh/desktop/configs/hypr/UserScripts:
+    layer: 'config'
+    tags: ["config"]
+    primary_files: ["fresh/desktop/configs/hypr/UserScripts/Weather.sh", "fresh/desktop/configs/hypr/UserScripts/RofiBeats.sh", "fresh/desktop/configs/hypr/UserScripts/RainbowBorders.bak.sh", "fresh/desktop/configs/hypr/UserScripts/WeatherWrap.sh", "fresh/desktop/configs/hypr/UserScripts/ZshChangeTheme.sh"]
+  fresh/desktop/configs/hypr/animations:
+    layer: 'config'
+    tags: ["config", "robotics"]
+    primary_files: ["fresh/desktop/configs/hypr/animations/ML4W - standard.conf", "fresh/desktop/configs/hypr/animations/ML4W - moving.conf", "fresh/desktop/configs/hypr/animations/HYDE - Vertical.conf", "fresh/desktop/configs/hypr/animations/HYDE - minimal-2.conf", "fresh/desktop/configs/hypr/animations/HYDE - optimized.conf"]
+  fresh/desktop/configs/hypr/configs:
+    layer: 'config'
+    tags: ["config"]
+    primary_files: ["fresh/desktop/configs/hypr/configs/Keybinds.conf", "fresh/desktop/configs/hypr/configs/WindowRules-config-v3.conf", "fresh/desktop/configs/hypr/configs/SystemSettings.conf", "fresh/desktop/configs/hypr/configs/Laptops.conf", "fresh/desktop/configs/hypr/configs/WindowRules.conf"]
+  fresh/desktop/configs/hypr/scripts:
+    layer: 'config'
+    tags: ["config"]
+    primary_files: ["fresh/desktop/configs/hypr/scripts/Dropterminal.sh", "fresh/desktop/configs/hypr/scripts/KeyboardLayout.sh", "fresh/desktop/configs/hypr/scripts/KillActiveProcess.sh", "fresh/desktop/configs/hypr/scripts/Wlogout.sh", "fresh/desktop/configs/hypr/scripts/update_WindowRules.sh"]
+  fresh/desktop/configs/hypr/wallust:
+    layer: 'config'
+    tags: ["config"]
+    primary_files: ["fresh/desktop/configs/hypr/wallust/wallust-hyprland.conf"]
+  fresh/desktop/configs/waybar:
+    layer: 'config'
+    tags: ["config"]
+    primary_files: ["fresh/desktop/configs/waybar/ModulesGroups", "fresh/desktop/configs/waybar/Modules", "fresh/desktop/configs/waybar/ModulesVertical", "fresh/desktop/configs/waybar/ModulesCustom", "fresh/desktop/configs/waybar/config"]
+  fresh/desktop/configs/waybar/configs:
+    layer: 'config'
+    tags: ["config"]
+    primary_files: ["fresh/desktop/configs/waybar/configs/[BOT] Default", "fresh/desktop/configs/waybar/configs/[BOT & Right] SouthEast", "fresh/desktop/configs/waybar/configs/[TOP] Everforest", "fresh/desktop/configs/waybar/configs/[TOP] Default (old v1)", "fresh/desktop/configs/waybar/configs/[TOP] Peony"]
+  fresh/desktop/configs/waybar/style:
+    layer: 'config'
+    tags: ["config", "robotics", "testing"]
+    primary_files: ["fresh/desktop/configs/waybar/style/[Catppuccin] Frappe.css", "fresh/desktop/configs/waybar/style/[Colorful] stolen-style.css", "fresh/desktop/configs/waybar/style/[Extra] ML4W starter.css", "fresh/desktop/configs/waybar/style/[Extra] EverForest.css", "fresh/desktop/configs/waybar/style/[Catppuccin] Latte.css"]
+  fresh/desktop/configs/waybar/style/catppuccin-themes:
+    layer: 'config'
+    tags: ["config"]
+    primary_files: ["fresh/desktop/configs/waybar/style/catppuccin-themes/mocha.css", "fresh/desktop/configs/waybar/style/catppuccin-themes/latte.css", "fresh/desktop/configs/waybar/style/catppuccin-themes/frappe.css", "fresh/desktop/configs/waybar/style/catppuccin-themes/rgbmocha.css"]
+  fresh/desktop/configs/waybar/wallust:
+    layer: 'config'
+    tags: ["config"]
+    primary_files: ["fresh/desktop/configs/waybar/wallust/colors-waybar.css"]
+  fresh/desktop/tasks:
+    layer: 'config'
+    tags: ["config"]
+    primary_files: ["fresh/desktop/tasks/hyprland.yml", "fresh/desktop/tasks/apps.yml", "fresh/desktop/tasks/hyprland_waybar_transparent.yml", "fresh/desktop/tasks/dots.yml", "fresh/desktop/tasks/shell_config.yml"]
+  fresh/desktop/vars:
+    layer: 'auth'
+    tags: ["auth"]
+    primary_files: ["fresh/desktop/vars/passwords.yml"]
+  fresh/home_lab:
+    layer: 'general'
+    tags: []
+    primary_files: ["fresh/home_lab/run.sh", "fresh/home_lab/README.md"]
+  fresh/home_lab/anime_torrent_streamer:
+    layer: 'general'
+    tags: []
+    primary_files: ["fresh/home_lab/anime_torrent_streamer/site.yml"]
+  fresh/home_lab/anime_torrent_streamer/files:
+    layer: 'general'
+    tags: []
+    primary_files: ["fresh/home_lab/anime_torrent_streamer/files/docker-compose.yml"]
+  fresh/home_lab/music_stack:
+    layer: 'general'
+    tags: []
+    primary_files: ["fresh/home_lab/music_stack/site.yml"]
+  fresh/home_lab/music_stack/files:
+    layer: 'general'
+    tags: []
+    primary_files: ["fresh/home_lab/music_stack/files/docker-compose.yml"]
+  fresh/home_lab/pihole:
+    layer: 'general'
+    tags: []
+    primary_files: ["fresh/home_lab/pihole/site.yml", "fresh/home_lab/pihole/RESEARCH.md"]
+  fresh/home_lab/pihole/files:
+    layer: 'general'
+    tags: []
+    primary_files: ["fresh/home_lab/pihole/files/docker-compose.yml"]
+  fresh/home_lab/utility_stack:
+    layer: 'general'
+    tags: []
+    primary_files: ["fresh/home_lab/utility_stack/site.yml"]
+  fresh/home_lab/utility_stack/files:
+    layer: 'general'
+    tags: []
+    primary_files: ["fresh/home_lab/utility_stack/files/docker-compose.yml"]
+  fresh/server:
+    layer: 'general'
+    tags: []
+    primary_files: ["fresh/server/inventory.ini", "fresh/server/run.sh", "fresh/server/main_script.yml", "fresh/server/README.md"]
+  fresh/server/configs:
+    layer: 'config'
+    tags: ["config"]
+    primary_files: ["fresh/server/configs/shell_settings.zsh"]
+  fresh/server/tasks:
+    layer: 'general'
+    tags: []
+    primary_files: ["fresh/server/tasks/headless_apps.yml", "fresh/server/tasks/dev_tools.yml"]
+  fresh/server/vars:
+    layer: 'auth'
+    tags: ["auth"]
+    primary_files: ["fresh/server/vars/passwords.yml"]
