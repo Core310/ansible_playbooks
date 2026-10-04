@@ -45,6 +45,17 @@ IGNORED_DIRS = {
     "logs",
     "archive",
     "openStreetUSD",
+    "media",
+    "photos",
+    "lost+found",
+    "docker",
+    "cache",
+    "data",
+    "webUI",
+    "Definitions",
+    "BT_backup",
+    "kcef",
+    "assets",
 }
 
 IGNORED_EXTENSIONS = {
@@ -76,6 +87,10 @@ IGNORED_EXTENSIONS = {
     ".pt",
     ".npy",
     ".npz",
+    ".db",
+    ".db-wal",
+    ".db-shm",
+    ".fastresume",
 }
 
 # -----------------------------------------------------------------------------
@@ -314,10 +329,11 @@ def get_git_commit(workspace: Path) -> str:
 
 
 def get_git_blob_hash(filepath: Path, workspace: Path) -> str:
-    rel_path = filepath.relative_to(workspace)
-    code, out, _ = run_cmd(["git", "hash-object", str(rel_path)], workspace)
-    if code == 0 and out:
-        return out
+    if (workspace / ".git").exists():
+        rel_path = filepath.relative_to(workspace)
+        code, out, _ = run_cmd(["git", "hash-object", str(rel_path)], workspace)
+        if code == 0 and out:
+            return out
     try:
         hasher = hashlib.sha1()
         with open(filepath, "rb") as f:

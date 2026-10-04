@@ -228,7 +228,15 @@ def fetch_turn_history(workspace: Path, limit: int = 5) -> str:
     out = [f"### Recent Turn Actions (Last {limit}):"]
     if actions:
         for ts, atype, m, p, t, desc, status, files in actions:
-            files_list = json.loads(files) if files else []
+            if files:
+                try:
+                    files_list = json.loads(files)
+                    if isinstance(files_list, str):
+                        files_list = [files_list]
+                except Exception:
+                    files_list = [files]
+            else:
+                files_list = []
             f_str = f" [Files: {', '.join(files_list)}]" if files_list else ""
             out.append(f"- **{atype}** ({status}) [{m}/{p}/{t}]: {desc}{f_str}")
     else:

@@ -4,10 +4,19 @@
     name: tmux
     state: present
 
+- name: Create .tmux directory
+  file:
+    path: "/home/{{ target_user }}/.tmux/plugins"
+    state: directory
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    mode: '0755'
+
 - name: Install tmux plugin manager (tpm)
   git:
     repo: https://github.com/tmux-plugins/tpm
     dest: "/home/{{ target_user }}/.tmux/plugins/tpm"
+  become_user: "{{ target_user }}"
 
 - name: Create .tmux.conf file
   copy:
@@ -21,9 +30,41 @@
       set -g @plugin 'tmux-plugins/tpm'
       set -g @plugin 'tmux-plugins/tmux-sensible'
       set -g @plugin 'tmux-plugins/tmux-resurrect'
+      set -g @plugin 'tmux-plugins/tmux-continuum'
+
+      # Resurrect options
+      set -g @resurrect-capture-pane-contents 'on'
+      set -g @resurrect-strategy-nvim 'session'
+
+      # Continuum options (auto-restore on start & periodic save every 10 min & auto boot)
+      set -g @continuum-restore 'on'
+      set -g @continuum-save-interval '10'
+      set -g @continuum-boot 'on'
 
       # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
       run '~/.tmux/plugins/tpm/tpm'
     owner: "{{ target_user }}"
     group: "{{ target_user }}"
-    mode: 0644
+    mode: '0644'
+
+- name: Ensure correct ownership of ~/.tmux
+  file:
+    path: "/home/{{ target_user }}/.tmux"
+    state: directory
+    owner: "{{ target_user }}"
+    group: "{{ target_user }}"
+    recurse: yes
+
+- name: Install TPM plugins via install_plugins script
+  command: "/home/{{ target_user }}/.tmux/plugins/tpm/bin/install_plugins"
+  become_user: "{{ target_user }}"
+  environment:
+    HOME: "/home/{{ target_user }}"
+    TMUX_PLUGIN_MANAGER_PATH: "/home/{{ target_user }}/.tmux/plugins"
+  changed_when: false
+
+- name: Enable user linger for background service execution across boots
+  command: "loginctl enable-linger {{ target_user }}"
+  changed_when: false
+  failed_when: false
+
