@@ -58,6 +58,15 @@
       exec python3 "{{ playbook_dir }}/../../cta/bin/cta_cleanup.py" "$@"
   when: not ansible_check_mode
 
+- name: symlink global AGY memories to Gemini config
+  become_user: "{{ target_user }}"
+  file:
+    src: "/home/{{ target_user }}/.agy/AGY.md"
+    dest: "/home/{{ target_user }}/.gemini/config/GEMINI.md"
+    state: link
+    force: yes
+  when: not ansible_check_mode
+
 - name: symlink CTA skills to ~/.gemini/config/skills
   become_user: "{{ target_user }}"
   file:
@@ -66,6 +75,8 @@
     state: link
     force: yes
   loop:
+    - cta-audit
+    - cta-stagger
     - cta-init
     - cta-mapper
     - cta-query
@@ -85,6 +96,8 @@
     state: link
     force: yes
   loop:
+    - cta-audit
+    - cta-stagger
     - cta-init
     - cta-mapper
     - cta-query

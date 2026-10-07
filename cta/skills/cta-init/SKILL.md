@@ -12,11 +12,10 @@ CTA bridges spec-driven development with token-efficient SQLite RAG. Initializin
 </why_this_matters>
 
 <cli_commands>
-The CTA Engine is located at:
-`/home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_engine.py`
+The CTA Engine is available in PATH as `cta`:
 
 - **Initialize Workspace**:
-  `python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_engine.py --workspace . init`
+  `cta --workspace . init`
 </cli_commands>
 
 <examples>
@@ -24,7 +23,7 @@ The CTA Engine is located at:
 **Agent Situation**: Starting work on a new large codebase with no prior CTA setup.
 **Action**:
 ```bash
-python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_engine.py --workspace . init
+cta --workspace . init
 ```
 **Output Received**:
 ```

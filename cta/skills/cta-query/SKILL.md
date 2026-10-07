@@ -21,20 +21,20 @@ By querying the CTA SQLite database using `cta_fetch.py` or `cta_engine.py`, you
 
 <cli_commands>
 The retrieval helper is located at:
-`/home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_fetch.py`
+`cta`
 
 - **Fetch Symbol**:
-  `python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_fetch.py symbol <symbol_name>`
+  `cta-fetch symbol <symbol_name>`
 - **Fetch File Outline**:
-  `python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_fetch.py outline <file_path>`
+  `cta-fetch outline <file_path>`
 - **Fetch Context Packet (RAG)**:
-  `python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_fetch.py context "<task_query>"`
+  `cta-fetch context "<task_query>"`
 - **Fetch Call Graph**:
-  `python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_fetch.py callers <function_name>`
+  `cta-fetch callers <function_name>`
 - **Fetch Turn History**:
-  `python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_fetch.py turns --limit 5`
+  `cta-fetch turns --limit 5`
 - **Fetch File Line Slice**:
-  `python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_fetch.py slice <file_path> <start_line> <end_line>`
+  `cta-fetch slice <file_path> <start_line> <end_line>`
 </cli_commands>
 
 <examples>
@@ -42,7 +42,7 @@ The retrieval helper is located at:
 **Agent Goal**: Need to inspect how JWT tokens are generated.
 **Action**:
 ```bash
-python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_fetch.py symbol generate_jwt
+cta-fetch symbol generate_jwt
 ```
 **Output Received**:
 ```
@@ -52,14 +52,14 @@ Found 1 symbol(s) for 'generate_jwt':
 ```
 **Next Action**: Read only lines 45-62 using `slice`:
 ```bash
-python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_fetch.py slice src/auth/jwt.py 45 62
+cta-fetch slice src/auth/jwt.py 45 62
 ```
 
 ### Example 2: Understanding a New File without Reading 1,000 Lines
 **Agent Goal**: Understand what `src/services/billing.py` contains.
 **Action**:
 ```bash
-python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_fetch.py outline src/services/billing.py
+cta-fetch outline src/services/billing.py
 ```
 **Output Received**:
 ```

@@ -56,7 +56,17 @@ install_cta() {
   echo "Installing CTA Framework from ${CTA_DIR}..."
   mkdir -p "${BIN_DIR}"
   mkdir -p "${GEMINI_SKILLS_DIR}"
-  mkdir -p "${AGY_SKILLS_DIR}"
+  CLEARSET_DIR="${HOME}/Documents/clearset"
+  if [ -d "${CLEARSET_DIR}" ]; then
+    echo "Ensuring ClearSet (cs) core is installed..."
+    "${CLEARSET_DIR}/install.sh" --install
+    pip install -e "${CLEARSET_DIR}" --no-deps --break-system-packages --quiet 2>/dev/null || true
+  fi
+
+  if [ -f "${HOME}/.agy/AGY.md" ]; then
+    echo "Linking global AGY memories to Gemini config..."
+    ln -sf "${HOME}/.agy/AGY.md" "${HOME}/.gemini/config/GEMINI.md"
+  fi
 
   CTA_ENGINE="${CTA_DIR}/bin/cta_engine.py"
   CTA_FETCH="${CTA_DIR}/bin/cta_fetch.py"

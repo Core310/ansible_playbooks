@@ -16,13 +16,12 @@ You are the CTA Task Executor. You implement individual tasks specified by the a
 </workflow>
 
 <cli_commands>
-The CTA Engine is located at:
-`/home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_engine.py`
+The CTA Engine is available in PATH as `cta`:
 
 - **Log Turn Action**:
-  `python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_engine.py log-action --milestone "<M>" --phase "<P>" --task "<T>" --type "EXECUTION" --desc "<Description>" --status "SUCCESS" --files <f1> <f2> --summary "<Summary>"`
+  `cta log-action --milestone "<M>" --phase "<P>" --task "<T>" --type "EXECUTION" --desc "<Description>" --status "SUCCESS" --files <f1> <f2> --summary "<Summary>"`
 - **Log Concern or Bug**:
-  `python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_engine.py log-learning --kind issue --category "<Category>" --title "<Title>" --details "<Details>" --files <f1>`
+  `cta log-learning --kind issue --category "<Category>" --title "<Title>" --details "<Details>" --files <f1>`
 </cli_commands>
 
 <examples>
@@ -30,7 +29,7 @@ The CTA Engine is located at:
 **Agent Situation**: Executing Task 1.1: Add `UserProfile` model in `src/models/user.py`.
 **Step 1**: Check existing file outline:
 ```bash
-python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_fetch.py outline src/models/user.py
+cta-fetch outline src/models/user.py
 ```
 **Step 2**: Edit `src/models/user.py` to add `UserProfile`.
 **Step 3**: Run verification:
@@ -39,7 +38,7 @@ pytest tests/test_models.py -k test_user_profile
 ```
 **Step 4**: Log turn action to SQLite:
 ```bash
-python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_engine.py log-action \
+cta log-action \
   --milestone "M001" \
   --phase "Phase 1" \
   --task "Task 1.1" \

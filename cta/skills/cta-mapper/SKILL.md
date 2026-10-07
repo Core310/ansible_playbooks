@@ -22,13 +22,12 @@ Large codebases change constantly. Full re-scans are slow. `cta-mapper` uses Git
 </process>
 
 <cli_commands>
-The CTA Engine is located at:
-`/home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_engine.py`
+The CTA Engine is available in PATH as `cta`:
 
 - **Full Scan**:
-  `python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_engine.py --workspace . map`
+  `cta --workspace . map`
 - **Incremental Git Diff Scan**:
-  `python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_engine.py --workspace . map --incremental`
+  `cta --workspace . map --incremental`
 </cli_commands>
 
 <examples>
@@ -36,7 +35,7 @@ The CTA Engine is located at:
 **Agent Situation**: You just edited `backend/services/auth.py` and created `backend/services/token.py`.
 **Action**:
 ```bash
-python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_engine.py --workspace . map --incremental
+cta --workspace . map --incremental
 ```
 **Output Received**:
 ```
@@ -44,14 +43,14 @@ Codebase mapped: 2 indexed, 482 unchanged, 0 pruned.
 ```
 **Verification**: Check that the new symbols are queryable:
 ```bash
-python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_fetch.py outline backend/services/token.py
+cta-fetch outline backend/services/token.py
 ```
 
 ### Example 2: Full Map after Switching Git Branches
 **Agent Situation**: Checked out `feature/payments-v2` branch.
 **Action**:
 ```bash
-python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_engine.py --workspace . map
+cta --workspace . map
 ```
 **Output Received**:
 ```

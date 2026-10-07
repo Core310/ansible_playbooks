@@ -19,13 +19,12 @@ You are the CTA Context Checkpoint Agent. When the user requests `/cta-clear` or
 </process>
 
 <cli_commands>
-The CTA Engine is located at:
-`/home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_engine.py`
+The CTA Engine is available in PATH as `cta`:
 
 - **Step 1: Sync Codebase Diff**:
-  `python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_engine.py --workspace . map --incremental`
+  `cta --workspace . map --incremental`
 - **Step 2: Checkpoint State**:
-  `python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_engine.py --workspace . checkpoint --milestone "<Milestone>" --phase "<Phase>" --task "<Task>" --next "<Next_Todo>"`
+  `cta --workspace . checkpoint --milestone "<Milestone>" --phase "<Phase>" --task "<Task>" --next "<Next_Todo>"`
 </cli_commands>
 
 <examples>
@@ -33,11 +32,11 @@ The CTA Engine is located at:
 **Agent Situation**: User says "/cta-clear" or conversation context is full.
 **Step 1: Incremental Map**:
 ```bash
-python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_engine.py --workspace . map --incremental
+cta --workspace . map --incremental
 ```
 **Step 2: Create Checkpoint**:
 ```bash
-python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_engine.py --workspace . checkpoint \
+cta --workspace . checkpoint \
   --milestone "M001: Core Architecture" \
   --phase "Phase 2: Database Schema" \
   --task "Task 2.2: User Profiles" \

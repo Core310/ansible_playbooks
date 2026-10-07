@@ -4,7 +4,7 @@ This example demonstrates how `cta-mapper` updates only modified files in a 10,0
 
 ## Running Incremental Map
 ```bash
-python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_engine.py --workspace . map --incremental
+cta --workspace . map --incremental
 ```
 
 ### Output

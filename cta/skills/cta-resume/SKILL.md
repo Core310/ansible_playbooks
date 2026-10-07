@@ -15,11 +15,10 @@ You are the CTA Session Resume Agent. Upon starting a new session or after runni
 </process>
 
 <cli_commands>
-The CTA Engine is located at:
-`/home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_engine.py`
+The CTA Engine is available in PATH as `cta`:
 
 - **Bootstrap Session Context**:
-  `python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_engine.py --workspace . resume`
+  `cta --workspace . resume`
 </cli_commands>
 
 <examples>
@@ -27,7 +26,7 @@ The CTA Engine is located at:
 **Agent Situation**: User starts a fresh turn and types `/cta-resume` or asks "what's next?".
 **Action**:
 ```bash
-python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_engine.py --workspace . resume
+cta --workspace . resume
 ```
 **Output Received**:
 ```markdown

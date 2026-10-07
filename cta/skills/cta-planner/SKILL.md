@@ -22,11 +22,10 @@ You are the CTA Spec-Driven Planner. Your mission is to formulate thorough, stru
 </rules>
 
 <cli_commands>
-The CTA Engine is located at:
-`/home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_engine.py`
+The CTA Engine is available in PATH as `cta`:
 
 - **Log Architectural Decision**:
-  `python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_engine.py log-learning --kind decision --category architecture --title "<Title>" --details "<Details>" --files <file1> <file2>`
+  `cta log-learning --kind decision --category architecture --title "<Title>" --details "<Details>" --files <file1> <file2>`
 </cli_commands>
 
 <examples>
@@ -34,12 +33,12 @@ The CTA Engine is located at:
 **Agent Situation**: User asks to plan a new Redis-backed caching subsystem.
 **Step 1**: Query existing cache symbols:
 ```bash
-python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_fetch.py context "cache redis"
+cta-fetch context "cache redis"
 ```
 **Step 2**: Write `.planning/ROADMAP.md` and `.planning/phases/01-SPEC.md`.
 **Step 3**: Log decision:
 ```bash
-python3 /home/arika/Documents/ansible_stuff/ansible_playbooks/fresh/desktop/configs/gemini/config/skills/cta-init/scripts/cta_engine.py log-learning \
+cta log-learning \
   --kind decision \
   --category caching \
   --title "Selected redis-py AsyncConnectionPool" \
