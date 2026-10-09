@@ -18,6 +18,13 @@
 - Skills & Commands:
   - **Cleanup**: Use the `@cleanup` subagent for health checks and codebase mapping.
   - **Course**: Use the `/course` command to trigger the `codebase-to-course` skill.
+- ClearSet:
+  - **Detection**: Check if `.cs` or `.cta` exists in the workspace. If present, activate ClearSet and CTA tools.
+  - **Retrieval**: Prefer `cs-fetch symbol`, `outline`, or `slice` over dumping full files into context.
+  - **Sync**: Run `cs-sync` or `cta sync` after creating or editing files to refresh the AST index.
+  - **Gates**: Run test and lint checks via `cs-gate` or `cta gate` to log deterministic exit codes to `cs_turns.db`.
+  - **Checkpoint**: Run `cs checkpoint` or `cta checkpoint` before `/clear`, and `cs resume` or `cta resume` on resume.
+  - **Audit**: Run `cta audit <file>` on documentation and Canvas deliverables to verify AI risk $< 60\%$ and $0$ banned clichés.
+  - **Stagger**: Run `cta stagger` or `cs-stagger` for multi-day commit histories on student deliverables.
+- Grug: Follow the principles of simplicity, avoiding bounciness and enterprise abstractions. Use the `@grug-brained-refactorer` skill when refactoring codebase structures to ensure compliance with https://grugbrain.dev/.
 - Summarization: Always include a short summary of what was done at the end of each response.
-- Grug Brained Developer: Follow the principles of simplicity, avoiding bounciness and enterprise abstractions. Use the `@grug-brained-refactorer` skill when refactoring codebase structures to ensure compliance with https://grugbrain.dev/.
-- CTA Framework: Use `/cta-clear` to checkpoint turn actions and codebase diffs to SQLite and write RESUME HERE.md before clearing context. Use `/cta-resume` on fresh sessions to restore state. Use `cta-fetch` to query symbols and outlines without reading whole files.
