@@ -1,30 +1,31 @@
 ## Agy Added Memories
-- Confirmation: I must never proceed to execute a new project phase without explicit user approval. I must stop after completing each individual subtask (todo) to wait for user confirmation before moving to the next one.
-- Style: No emojis, no italics. Bold is permitted ONLY for the first word of a bullet point.
-- Formatting: Bullet points must be denoted using '-' and math must be wrapped in $.
-- Commits: Do not commit files unless the user explicitly grants permission. When committing, the message must be verbose and cover all changes in detail.
-- File Management: Prefer moving files to a /trash folder instead of deleting them. Only delete files if explicitly instructed by the user.
-- Planning & Context: Always search for and source the .planning directory into the current context window if it is available.
-- Checkpointing (RESUME HERE): After completing any todo or phase, I must update the `.planning` documents with a clear **RESUME HERE** section (or update the `.continue-here` file). This section must contain the current MILESTONE, Phase, sub-phase, and the exact next todo. I must inform the user exactly what was placed in this section to confirm they can safely use `/clear`.
-- Ready Context: If the session is reset, resumed, or the screen is cleared using `/clear`, I must immediately re-scan the `.planning` directory and the **RESUME HERE** state to summarize the active project status and restore continuity.
-- New Projects: Follow the structure MILESTONE -> Phases -> sub-phases with todos.
-- Execution: Do not implement code unless explicitly instructed to after presenting a plan. Always assume fixes do not work on the first try and require empirical user confirmation of success.
-- GSD Workflow (https://github.com/gsd-build/get-shit-done):
+- **Confirmation**: By default or when explicitly requested, require user confirmation between phases. When the user authorizes autonomous execution (e.g., "do all of them", "run autonomous", "proceed autonomously", or /goal), execute sub-phases and todos sequentially without stopping for human confirmation. In autonomous mode, run deterministic verification gates (exit code 0) and update checkpoints (.continue-here) after each subtask, stopping only if a verification gate fails or an unrecoverable error occurs.
+- **Style**: No emojis, no italics. Bold is permitted ONLY for the first word of a bullet point.
+- **Formatting**: Bullet points must be denoted using '-' and math must be wrapped in $.
+- **Commits**: Do not commit files unless the user explicitly grants permission. When committing, the message must be verbose and cover all changes in detail.
+- **File**: Prefer moving files to a /trash folder instead of deleting them. Only delete files if explicitly instructed by the user.
+- **Planning**: Always search for and source the .planning directory into the current context window if it is available.
+- **Checkpointing**: After completing any todo or phase, update the .planning documents with a clear RESUME HERE section (or update the .continue-here file). This section must contain the current MILESTONE, Phase, sub-phase, and the exact next todo. Inform the user exactly what was placed in this section to confirm they can safely use /clear.
+- **Ready**: If the session is reset, resumed, or the screen is cleared using /clear, immediately re-scan the .planning directory and the RESUME HERE state to summarize the active project status and restore continuity.
+- **New**: Follow the structure MILESTONE -> Phases -> sub-phases with todos.
+- **Execution**: In supervised mode, do not implement code unless explicitly instructed to after presenting a plan. In autonomous mode, proceed with implementation while assuming fixes require empirical confirmation of success via test gates.
+- **GSD**: Workflow (https://github.com/gsd-build/get-shit-done):
   - Always run the researcher phase first.
   - Follow with the discuss phase, using GSD agents to analyze and discuss any assumptions.
-  - Wait for user confirmation before running the executor agent.
+  - Wait for user confirmation before running the executor agent in supervised mode; run automatically in autonomous mode.
   - Source individual todos using gsd todos.
-  - Prefer using specialized GSD subagents (like `@cleanup`) for tasks whenever possible.
-- Skills & Commands:
-  - **Cleanup**: Use the `@cleanup` subagent for health checks and codebase mapping.
-  - **Course**: Use the `/course` command to trigger the `codebase-to-course` skill.
-- ClearSet:
-  - **Detection**: Check if `.cs` or `.cta` exists in the workspace. If present, activate ClearSet and CTA tools.
-  - **Retrieval**: Prefer `cs-fetch symbol`, `outline`, or `slice` over dumping full files into context.
-  - **Sync**: Run `cs-sync` or `cta sync` after creating or editing files to refresh the AST index.
-  - **Gates**: Run test and lint checks via `cs-gate` or `cta gate` to log deterministic exit codes to `cs_turns.db`.
-  - **Checkpoint**: Run `cs checkpoint` or `cta checkpoint` before `/clear`, and `cs resume` or `cta resume` on resume.
-  - **Audit**: Run `cta audit <file>` on documentation and Canvas deliverables to verify AI risk $< 60\%$ and $0$ banned clichés.
-  - **Stagger**: Run `cta stagger` or `cs-stagger` for multi-day commit histories on student deliverables.
-- Grug: Follow the principles of simplicity, avoiding bounciness and enterprise abstractions. Use the `@grug-brained-refactorer` skill when refactoring codebase structures to ensure compliance with https://grugbrain.dev/.
-- Summarization: Always include a short summary of what was done at the end of each response.
+  - Prefer using specialized GSD subagents (like @cleanup) for tasks whenever possible.
+- **Skills**: Commands and skills:
+  - **Cleanup**: Use the @cleanup subagent for health checks and codebase mapping.
+  - **Course**: Use the /course command to trigger the codebase-to-course skill.
+- **ClearSet**: ClearSet operations:
+  - **Detection**: Check if .cs or .cta exists in the workspace. If present, activate ClearSet and CTA tools.
+  - **Retrieval**: Prefer cs-fetch symbol, outline, or slice over dumping full files into context.
+  - **Sync**: Run cs-sync or cta sync after creating or editing files to refresh the AST index.
+  - **Gates**: Run test and lint checks via cs-gate or cta gate to log deterministic exit codes to cs_turns.db.
+  - **Checkpoint**: Run cs checkpoint or cta checkpoint before /clear, and cs resume or cta resume on resume.
+  - **Audit**: Run cta audit <file> on documentation and Canvas deliverables to verify AI risk $< 60\%$ and $0$ banned clichés.
+  - **Stagger**: Run cta stagger or cs-stagger for multi-day commit histories on student deliverables.
+  - **Autonomous**: When running autonomously, ClearSet tasks execute sequentially using cs-gate or test suites as synthetic approval authorities. Log actions to cs_turns.db, update .continue-here after each todo, and proceed automatically if exit code is $0$.
+- **Grug**: Follow the principles of simplicity, avoiding bounciness and enterprise abstractions. Use the @grug-brained-refactorer skill when refactoring codebase structures to ensure compliance with https://grugbrain.dev/.
+- **Summarization**: Always include a short summary of what was done at the end of each response.

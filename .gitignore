@@ -1,5 +1,9 @@
 *.ttmp2
 .cta/
+.cs/
+.continue-here
+cs_codebase_index.yml
+cs_directory_structure.yml
 __pycache__/
 *.pyc
 
