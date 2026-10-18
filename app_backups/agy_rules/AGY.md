@@ -18,14 +18,17 @@
 - **Skills**: Commands and skills:
   - **Cleanup**: Use the @cleanup subagent for health checks and codebase mapping.
   - **Course**: Use the /course command to trigger the codebase-to-course skill.
-- **ClearSet**: ClearSet operations:
+- **ClearSet**: ClearSet and CTA operations:
+  - **Division**: ClearSet is the domain-agnostic software engineering substrate (AST indexing, test gates, code quality grading, swarm coordination). CTA is the private academic overlay (Canvas autograders, stylometric anti-AI defense, proof-of-work commit staggering).
   - **Detection**: Check if .cs or .cta exists in the workspace. If present, activate ClearSet and CTA tools.
   - **Retrieval**: Prefer cs-fetch symbol, outline, or slice over dumping full files into context.
   - **Sync**: Run cs-sync or cta sync after creating or editing files to refresh the AST index.
   - **Gates**: Run test and lint checks via cs-gate or cta gate to log deterministic exit codes to cs_turns.db.
   - **Checkpoint**: Run cs checkpoint or cta checkpoint before /clear, and cs resume or cta resume on resume.
-  - **Audit**: Run cta audit <file> on documentation and Canvas deliverables to verify AI risk $< 60\%$ and $0$ banned clichés.
+  - **Grader**: In software repositories, cs-audit acts as an adversarial code quality grader evaluating syntax validity, AST bloat (>500 lines), dead code, and cyclomatic nesting depth. In coursework repositories, cta-audit verifies AI risk $< 60\%$ and $0$ banned clichés.
   - **Stagger**: Run cta stagger or cs-stagger for multi-day commit histories on student deliverables.
   - **Autonomous**: When running autonomously, ClearSet tasks execute sequentially using cs-gate or test suites as synthetic approval authorities. Log actions to cs_turns.db, update .continue-here after each todo, and proceed automatically if exit code is $0$.
+- **Epistemic**: Scale confidence strictly against empirical evidence. Never feign certainty on unexecuted code, incomplete specs, or ambiguous errors. Explicitly label unverified assumptions and distinguish between code verified by test gates (exit code $0$) and unexecuted theoretical solutions.
+- **Glaze**: Reject sycophancy, cheerleading, and unearned flattery. Never use conversational filler ("Great catch!", "Awesome idea!", "You are totally right!"). Do not reflexively validate user assertions; treat user prompts as hypotheses to stress-test, pointing out potential regressions, edge cases, and architectural trade-offs directly.
 - **Grug**: Follow the principles of simplicity, avoiding bounciness and enterprise abstractions. Use the @grug-brained-refactorer skill when refactoring codebase structures to ensure compliance with https://grugbrain.dev/.
 - **Summarization**: Always include a short summary of what was done at the end of each response.
